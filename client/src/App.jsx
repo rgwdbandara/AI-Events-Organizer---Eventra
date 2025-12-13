@@ -1,28 +1,31 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
+// Pages
 import Events from "./pages/Events";
+import EventDetails from "./pages/EventDetails";
+import CreateEvent from "./pages/CreateEvent";
+import EditEvent from "./pages/EditEvent";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import CreateEvent from "./pages/CreateEvent";
+
+// Components
 import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
-import EventDetails from "./pages/EventDetails";
-
 
 function App() {
   return (
-    <BrowserRouter>
+    <Router>
       <Navbar />
 
       <Routes>
-        {/* Public routes */}
-        <Route path="/" element={<Events />} />
+        {/* Public Routes */}
+        <Route path="/" element={<Events />} />        {/* ✅ FIX 1 */}
+        <Route path="/events" element={<Events />} />
+        <Route path="/events/:id" element={<EventDetails />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/events/:id" element={<EventDetails />} />
 
-
-        {/* Protected route */}
+        {/* Protected Routes */}
         <Route
           path="/create"
           element={
@@ -31,8 +34,17 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        <Route
+          path="/events/:id/edit"                   
+          element={
+            <ProtectedRoute>
+              <EditEvent />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
-    </BrowserRouter>
+    </Router>
   );
 }
 
