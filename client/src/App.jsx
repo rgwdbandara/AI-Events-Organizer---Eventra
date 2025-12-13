@@ -7,6 +7,8 @@ import CreateEvent from "./pages/CreateEvent";
 import EditEvent from "./pages/EditEvent";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import LandingPage from "./pages/LandingPage";
+
 
 // Components
 import Navbar from "./components/Navbar";
@@ -19,7 +21,8 @@ function App() {
 
       <Routes>
         {/* Public Routes */}
-        <Route path="/" element={<Events />} />        {/* ✅ FIX 1 */}
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/events" element={<Events />} />
         <Route path="/events" element={<Events />} />
         <Route path="/events/:id" element={<EventDetails />} />
         <Route path="/login" element={<Login />} />
