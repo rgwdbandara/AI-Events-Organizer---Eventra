@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom";
+import { theme } from "../styles/theme";
+
 
 export default function LandingPage() {
   return (
@@ -20,7 +22,7 @@ export default function LandingPage() {
           <div className="flex gap-4 animate-fade-up animate-delay-3">
             <Link
               to="/events"
-              className="px-6 py-3 font-semibold transition bg-blue-600 rounded-lg hover:bg-blue-700 hover:scale-105"
+              className={`${theme.colors.primary} ${theme.colors.primaryHover} ${theme.button}`}
             >
               Explore Events
             </Link>
