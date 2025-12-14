@@ -29,21 +29,21 @@ export default function Explore() {
   }, [search, category]);
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-6">
-      <h1 className="text-4xl font-bold mb-6">Explore Events</h1>
+    <div className="min-h-screen p-6 text-white bg-gray-900">
+      <h1 className="mb-6 text-4xl font-bold">Explore Events</h1>
 
       {/* Search & Filter */}
-      <div className="flex flex-col md:flex-row gap-4 mb-8">
+      <div className="flex flex-col gap-4 mb-8 md:flex-row">
         <input
           type="text"
           placeholder="Search events..."
-          className="p-3 bg-gray-800 rounded w-full md:w-1/2"
+          className="w-full p-3 bg-gray-800 rounded md:w-1/2"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
 
         <select
-          className="p-3 bg-gray-800 rounded w-full md:w-1/4"
+          className="w-full p-3 bg-gray-800 rounded md:w-1/4"
           value={category}
           onChange={(e) => setCategory(e.target.value)}
         >
@@ -59,22 +59,22 @@ export default function Explore() {
       {loading ? (
         <p className="text-gray-400">Loading events...</p>
       ) : (
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid gap-6 md:grid-cols-3">
           {events.map((event) => (
             <Link
               key={event._id}
               to={`/events/${event._id}`}
-              className="bg-gray-800 p-5 rounded-lg hover:scale-105 transition"
+              className="p-5 transition bg-gray-800 rounded-lg hover:scale-105"
             >
               <h2 className="text-xl font-semibold text-blue-400">
                 {event.title}
               </h2>
 
-              <p className="text-gray-300 mt-2 line-clamp-3">
+              <p className="mt-2 text-gray-300 line-clamp-3">
                 {event.description}
               </p>
 
-              <div className="mt-4 text-sm text-gray-400 space-y-1">
+              <div className="mt-4 space-y-1 text-sm text-gray-400">
                 <p>📍 {event.location}</p>
                 <p>📅 {event.date}</p>
                 <p>🏷 {event.category}</p>
@@ -85,7 +85,7 @@ export default function Explore() {
       )}
 
       {!loading && events.length === 0 && (
-        <p className="text-gray-400 mt-6">No events found.</p>
+        <p className="mt-6 text-gray-400">No events found.</p>
       )}
     </div>
   );

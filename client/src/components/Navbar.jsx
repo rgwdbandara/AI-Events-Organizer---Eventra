@@ -1,37 +1,38 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
-  const [loggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    setLoggedIn(!!localStorage.getItem("token"));
-  }, []);
+  // 🔑 SINGLE SOURCE OF TRUTH
+  const token = localStorage.getItem("token");
+  const isLoggedIn = !!token;
 
   const logout = () => {
-    localStorage.clear();
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
     navigate("/login");
   };
 
   return (
-    <nav className="bg-black text-white px-6 py-4 border-b border-gray-800">
-      <div className="flex justify-between items-center">
+    <nav className="px-6 py-4 text-white bg-black border-b border-gray-800">
+      <div className="flex items-center justify-between">
         <Link to="/" className="text-xl font-bold text-blue-400">
           Eventra
         </Link>
 
         {/* Desktop */}
-        <div className="hidden md:flex gap-6 items-center">
+        <div className="items-center hidden gap-6 md:flex">
           <Link to="/events">Events</Link>
+          <Link to="/explore">Explore</Link>
 
-          {loggedIn ? (
+          {isLoggedIn ? (
             <>
               <Link to="/create">Create</Link>
               <button
                 onClick={logout}
-                className="bg-red-500 px-4 py-1 rounded"
+                className="px-4 py-1 bg-red-500 rounded"
               >
                 Logout
               </button>
@@ -40,15 +41,13 @@ export default function Navbar() {
             <>
               <Link to="/login">Login</Link>
               <Link to="/register">Register</Link>
-              <Link to="/explore">Explore</Link>
-
             </>
           )}
         </div>
 
         {/* Mobile toggle */}
         <button
-          className="md:hidden text-2xl"
+          className="text-2xl md:hidden"
           onClick={() => setOpen(!open)}
         >
           ☰
@@ -57,13 +56,17 @@ export default function Navbar() {
 
       {/* Mobile menu */}
       {open && (
-        <div className="md:hidden mt-4 flex flex-col gap-4">
+        <div className="flex flex-col gap-4 mt-4 md:hidden">
           <Link to="/events">Events</Link>
+          <Link to="/explore">Explore</Link>
 
-          {loggedIn ? (
+          {isLoggedIn ? (
             <>
               <Link to="/create">Create</Link>
-              <button onClick={logout} className="text-left text-red-400">
+              <button
+                onClick={logout}
+                className="text-left text-red-400"
+              >
                 Logout
               </button>
             </>
@@ -71,8 +74,6 @@ export default function Navbar() {
             <>
               <Link to="/login">Login</Link>
               <Link to="/register">Register</Link>
-              <Link to="/explore">Explore</Link>
-
             </>
           )}
         </div>

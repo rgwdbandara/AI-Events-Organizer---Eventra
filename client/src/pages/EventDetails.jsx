@@ -1,22 +1,17 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const API_URL = "http://localhost:5000/api/events";
 
 export default function EventDetails() {
-  const { id } = useParams();
+  const { id } = useParams(); // 🔑 event id from URL
   const navigate = useNavigate();
 
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // get logged user from localStorage
-  const token = localStorage.getItem("token");
-  const user = JSON.parse(localStorage.getItem("user"));
-
-  // fetch event
   useEffect(() => {
     const fetchEvent = async () => {
       try {
@@ -32,85 +27,54 @@ export default function EventDetails() {
     fetchEvent();
   }, [id]);
 
-  // delete event
-  const handleDelete = async () => {
-    if (!window.confirm("Are you sure you want to delete this event?")) return;
-
-    try {
-      await axios.delete(`${API_URL}/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      alert("Event deleted successfully");
-      navigate("/events");
-    } catch (err) {
-      alert("Delete failed");
-    }
-  };
-
   if (loading) {
-    return <div className="p-6 text-white">Loading...</div>;
+    return <p className="text-gray-400 p-6">Loading event...</p>;
   }
 
   if (error) {
-    return <div className="p-6 text-red-500">{error}</div>;
+    return <p className="text-red-500 p-6">{error}</p>;
   }
 
-  console.log("Logged user:", user);
-console.log("Event organizer:", event.organizer);
-
-
-  const isOwner =
-  user &&
-  (event.organizer?._id === user._id ||
-   event.organizer === user._id);
-
+  if (!event) {
+    return <p className="text-gray-400 p-6">Event not found</p>;
+  }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0f172a] to-[#020617] text-white p-6">
-      <div className="max-w-3xl p-6 mx-auto shadow-lg bg-white/10 backdrop-blur-lg rounded-xl">
+    <div className="min-h-screen bg-gray-900 text-white p-6">
+      <div className="max-w-3xl mx-auto bg-gray-800 p-6 rounded-lg shadow-lg">
+        <h1 className="text-3xl font-bold text-blue-400 mb-4">
+          {event.title}
+        </h1>
 
-        <h1 className="mb-2 text-3xl font-bold">{event.title}</h1>
+        <p className="text-gray-300 mb-4">{event.description}</p>
 
-        <p className="mb-4 text-gray-300">{event.description}</p>
-
-        <div className="space-y-2 text-sm">
-          <p>📅 <span className="text-gray-300">{event.date}</span></p>
-          <p>⏰ <span className="text-gray-300">{event.time}</span></p>
-          <p>📍 <span className="text-gray-300">{event.location}</span></p>
+        <div className="space-y-2 text-gray-400">
+          <p>📅 Date: {event.date}</p>
+          <p>⏰ Time: {event.time}</p>
+          <p>📍 Location: {event.location}</p>
+          <p>🏷 Category: {event.category}</p>
           <p>
-            🏷️ Category:{" "}
-            <span className="text-blue-400">{event.category}</span>
+            👤 Organizer:{" "}
+            <span className="text-gray-300">
+              {event.organizer?.name}
+            </span>
           </p>
         </div>
 
-        <div className="flex gap-3 mt-6">
-          <Link
-            to="/events"
+        <div className="mt-6 flex gap-4">
+          <button
+            onClick={() => navigate(-1)}
             className="px-4 py-2 bg-gray-600 rounded hover:bg-gray-700"
           >
             Back
+          </button>
+
+          <Link
+            to="/events"
+            className="px-4 py-2 bg-blue-600 rounded hover:bg-blue-700"
+          >
+            All Events
           </Link>
-
-          {isOwner && (
-            <>
-              <Link
-                to={`/events/edit/${event._id}`}
-                className="px-4 py-2 bg-blue-600 rounded hover:bg-blue-700"
-              >
-                Edit
-              </Link>
-
-              <button
-                onClick={handleDelete}
-                className="px-4 py-2 bg-red-600 rounded hover:bg-red-700"
-              >
-                Delete
-              </button>
-            </>
-          )}
         </div>
       </div>
     </div>
