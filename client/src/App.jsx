@@ -8,6 +8,11 @@ import EditEvent from "./pages/EditEvent";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import LandingPage from "./pages/LandingPage";
+import Explore from "./pages/Explore";
+
+
+
+
 
 
 // Components
@@ -27,6 +32,11 @@ function App() {
         <Route path="/events/:id" element={<EventDetails />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/explore" element={<Explore />} />
+
+
+
+        
 
         {/* Protected Routes */}
         <Route

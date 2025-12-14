@@ -3,9 +3,9 @@ const router = express.Router();
 const Event = require("../models/Event");
 const auth = require("../middlewares/auth");
 
-
-/*CREATE EVENT (AUTH REQUIRED)*/
-
+/* =========================
+   CREATE EVENT (AUTH)
+========================= */
 router.post("/create", auth, async (req, res) => {
   try {
     const event = new Event({
@@ -20,28 +20,41 @@ router.post("/create", auth, async (req, res) => {
       event,
     });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: error.message });
   }
 });
 
-
-/*GET ALL EVENTS (PUBLIC)*/
-
+/* =========================
+   GET ALL EVENTS + SEARCH + FILTER (PUBLIC)
+   /api/events?search=tech&category=IT
+========================= */
 router.get("/", async (req, res) => {
   try {
-    const events = await Event.find()
+    const { search, category } = req.query;
+
+    let query = {};
+
+    if (search) {
+      query.title = { $regex: search, $options: "i" };
+    }
+
+    if (category && category !== "All") {
+      query.category = category;
+    }
+
+    const events = await Event.find(query)
       .populate("organizer", "name email")
       .sort({ createdAt: -1 });
 
     res.json(events);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: error.message });
   }
 });
 
-
-/*GET SINGLE EVENT (PUBLIC)*/
-
+/* =========================
+   GET SINGLE EVENT (PUBLIC)
+========================= */
 router.get("/:id", async (req, res) => {
   try {
     const event = await Event.findById(req.params.id)
@@ -53,12 +66,13 @@ router.get("/:id", async (req, res) => {
 
     res.json(event);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: error.message });
   }
 });
 
-/*UPDATE EVENT (OWNER ONLY)*/
-
+/* =========================
+   UPDATE EVENT (OWNER ONLY)
+========================= */
 router.put("/:id", auth, async (req, res) => {
   try {
     const event = await Event.findById(req.params.id);
@@ -67,7 +81,6 @@ router.put("/:id", auth, async (req, res) => {
       return res.status(404).json({ message: "Event not found" });
     }
 
-    // OWNER CHECK
     if (event.organizer.toString() !== req.user.id) {
       return res.status(403).json({ message: "Not authorized" });
     }
@@ -80,27 +93,31 @@ router.put("/:id", auth, async (req, res) => {
 
     res.json(updatedEvent);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ message: error.message });
   }
 });
 
-
-
-/*DELETE EVENT (OWNER ONLY)*/
-router.get("/:id", async (req, res) => {
+/* =========================
+   DELETE EVENT (OWNER ONLY)
+========================= */
+router.delete("/:id", auth, async (req, res) => {
   try {
-    const event = await Event.findById(req.params.id)
-      .populate("organizer", "name email");
+    const event = await Event.findById(req.params.id);
 
     if (!event) {
       return res.status(404).json({ message: "Event not found" });
     }
 
-    res.json(event);
-  } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    if (event.organizer.toString() !== req.user.id) {
+      return res.status(403).json({ message: "Not authorized" });
+    }
+
+    await event.deleteOne();
+
+    res.json({ message: "Event deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 });
-
 
 module.exports = router;

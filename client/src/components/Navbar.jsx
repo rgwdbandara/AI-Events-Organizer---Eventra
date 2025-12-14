@@ -1,51 +1,80 @@
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 export default function Navbar() {
+  const [open, setOpen] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation();
 
-  const token = localStorage.getItem("token");
+  useEffect(() => {
+    setLoggedIn(!!localStorage.getItem("token"));
+  }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+  const logout = () => {
+    localStorage.clear();
     navigate("/login");
   };
 
   return (
-    <nav className="flex items-center gap-6 px-6 py-4 text-white bg-black border-b border-gray-800">
-      
-      {/* Home */}
-      <Link to="/" className="text-xl font-bold text-blue-400">
-        Eventra
-      </Link>
+    <nav className="bg-black text-white px-6 py-4 border-b border-gray-800">
+      <div className="flex justify-between items-center">
+        <Link to="/" className="text-xl font-bold text-blue-400">
+          Eventra
+        </Link>
 
-      {/* Events */}
-      <Link to="/events" className="hover:text-blue-400">
-        Events
-      </Link>
+        {/* Desktop */}
+        <div className="hidden md:flex gap-6 items-center">
+          <Link to="/events">Events</Link>
 
-      {token ? (
-        <>
-          <Link to="/create" className="hover:text-blue-400">
-            Create Event
-          </Link>
+          {loggedIn ? (
+            <>
+              <Link to="/create">Create</Link>
+              <button
+                onClick={logout}
+                className="bg-red-500 px-4 py-1 rounded"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to="/login">Login</Link>
+              <Link to="/register">Register</Link>
+              <Link to="/explore">Explore</Link>
 
-          <button
-            onClick={handleLogout}
-            className="px-4 py-1 ml-auto bg-red-500 rounded hover:bg-red-600"
-          >
-            Logout
-          </button>
-        </>
-      ) : (
-        <div className="flex gap-4 ml-auto">
-          <Link to="/login" className="hover:text-blue-400">
-            Login
-          </Link>
-          <Link to="/register" className="hover:text-blue-400">
-            Register
-          </Link>
+            </>
+          )}
+        </div>
+
+        {/* Mobile toggle */}
+        <button
+          className="md:hidden text-2xl"
+          onClick={() => setOpen(!open)}
+        >
+          ☰
+        </button>
+      </div>
+
+      {/* Mobile menu */}
+      {open && (
+        <div className="md:hidden mt-4 flex flex-col gap-4">
+          <Link to="/events">Events</Link>
+
+          {loggedIn ? (
+            <>
+              <Link to="/create">Create</Link>
+              <button onClick={logout} className="text-left text-red-400">
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to="/login">Login</Link>
+              <Link to="/register">Register</Link>
+              <Link to="/explore">Explore</Link>
+
+            </>
+          )}
         </div>
       )}
     </nav>
