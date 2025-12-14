@@ -27,26 +27,45 @@ export default function EventDetails() {
     fetchEvent();
   }, [id]);
 
+  const token = localStorage.getItem("token");
+
+  const handleRegister = async () => {
+    try {
+      await axios.post(
+        `http://localhost:5000/api/registrations/${event._id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      alert("Registered successfully!");
+    } catch (err) {
+      alert(err.response?.data?.message || "Registration failed");
+    }
+  };
+
   if (loading) {
-    return <p className="text-gray-400 p-6">Loading event...</p>;
+    return <p className="p-6 text-gray-400">Loading event...</p>;
   }
 
   if (error) {
-    return <p className="text-red-500 p-6">{error}</p>;
+    return <p className="p-6 text-red-500">{error}</p>;
   }
 
   if (!event) {
-    return <p className="text-gray-400 p-6">Event not found</p>;
+    return <p className="p-6 text-gray-400">Event not found</p>;
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-6">
-      <div className="max-w-3xl mx-auto bg-gray-800 p-6 rounded-lg shadow-lg">
-        <h1 className="text-3xl font-bold text-blue-400 mb-4">
+    <div className="min-h-screen p-6 text-white bg-gray-900">
+      <div className="max-w-3xl p-6 mx-auto bg-gray-800 rounded-lg shadow-lg">
+        <h1 className="mb-4 text-3xl font-bold text-blue-400">
           {event.title}
         </h1>
 
-        <p className="text-gray-300 mb-4">{event.description}</p>
+        <p className="mb-4 text-gray-300">{event.description}</p>
 
         <div className="space-y-2 text-gray-400">
           <p>📅 Date: {event.date}</p>
@@ -61,7 +80,16 @@ export default function EventDetails() {
           </p>
         </div>
 
-        <div className="mt-6 flex gap-4">
+        {token && (
+          <button
+            onClick={handleRegister}
+            className="px-4 py-2 mt-6 bg-green-600 rounded hover:bg-green-700"
+          >
+            Register for Event
+          </button>
+        )}
+
+        <div className="flex gap-4 mt-6">
           <button
             onClick={() => navigate(-1)}
             className="px-4 py-2 bg-gray-600 rounded hover:bg-gray-700"
