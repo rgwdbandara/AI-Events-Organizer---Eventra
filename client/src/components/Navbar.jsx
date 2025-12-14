@@ -27,6 +27,8 @@ export default function Navbar() {
           <Link to="/events">Events</Link>
           <Link to="/explore">Explore</Link>
           <Link to="/my-events">My Events</Link>
+          <Link to="/my-tickets">My Tickets</Link>
+
 
 
           {isLoggedIn ? (
@@ -44,6 +46,8 @@ export default function Navbar() {
               <Link to="/login">Login</Link>
               <Link to="/register">Register</Link>
               <Link to="/my-events">My Events</Link>
+              <Link to="/my-tickets">My Tickets</Link>
+
 
             </>
           )}

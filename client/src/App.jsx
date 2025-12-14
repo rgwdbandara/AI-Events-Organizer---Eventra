@@ -10,6 +10,8 @@ import Register from "./pages/Register";
 import LandingPage from "./pages/LandingPage";
 import Explore from "./pages/Explore";
 import MyEvents from "./pages/MyEvents";
+import MyTickets from "./pages/MyTickets";
+
 
 
 
@@ -64,6 +66,16 @@ function App() {
                </ProtectedRoute>
       }
          />
+
+         <Route
+  path="/my-tickets"
+  element={
+    <ProtectedRoute>
+      <MyTickets />
+    </ProtectedRoute>
+  }
+/>
+
 
       </Routes>
     </Router>

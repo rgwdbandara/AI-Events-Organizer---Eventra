@@ -4,6 +4,23 @@ const Registration = require("../models/Registration");
 const Event = require("../models/Event");
 const auth = require("../middlewares/auth");
 
+
+/* =========================
+   GET MY TICKETS (AUTH)
+========================= */
+router.get("/my-tickets", auth, async (req, res) => {
+  try {
+    const tickets = await Registration.find({
+      user: req.user.id,
+    }).populate("event");
+
+    res.json(tickets);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+
 /* =========================
    REGISTER FOR EVENT (FREE)
 ========================= */
@@ -37,5 +54,7 @@ router.post("/:eventId", auth, async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
+
 
 module.exports = router;
