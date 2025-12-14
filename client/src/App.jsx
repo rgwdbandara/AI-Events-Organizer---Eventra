@@ -9,6 +9,8 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import LandingPage from "./pages/LandingPage";
 import Explore from "./pages/Explore";
+import MyEvents from "./pages/MyEvents";
+
 
 
 
@@ -35,8 +37,6 @@ function App() {
 
 
 
-        
-
         {/* Protected Routes */}
         <Route
           path="/create"
@@ -55,6 +55,16 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        <Route
+           path="/my-events"
+           element={
+               <ProtectedRoute>
+               <MyEvents />
+               </ProtectedRoute>
+      }
+         />
+
       </Routes>
     </Router>
   );

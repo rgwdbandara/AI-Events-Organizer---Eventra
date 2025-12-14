@@ -26,6 +26,8 @@ export default function Navbar() {
         <div className="items-center hidden gap-6 md:flex">
           <Link to="/events">Events</Link>
           <Link to="/explore">Explore</Link>
+          <Link to="/my-events">My Events</Link>
+
 
           {isLoggedIn ? (
             <>
@@ -41,6 +43,8 @@ export default function Navbar() {
             <>
               <Link to="/login">Login</Link>
               <Link to="/register">Register</Link>
+              <Link to="/my-events">My Events</Link>
+
             </>
           )}
         </div>

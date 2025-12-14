@@ -53,6 +53,21 @@ router.get("/", async (req, res) => {
 });
 
 /* =========================
+   GET MY EVENTS (AUTH)
+========================= */
+router.get("/my-events", auth, async (req, res) => {
+  try {
+    const events = await Event.find({ organizer: req.user.id })
+      .sort({ createdAt: -1 });
+
+    res.json(events);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+
+/* =========================
    GET SINGLE EVENT (PUBLIC)
 ========================= */
 router.get("/:id", async (req, res) => {
@@ -119,5 +134,7 @@ router.delete("/:id", auth, async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
+
 
 module.exports = router;
