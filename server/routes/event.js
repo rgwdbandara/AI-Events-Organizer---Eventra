@@ -135,6 +135,27 @@ router.delete("/:id", auth, async (req, res) => {
   }
 });
 
+/* =========================
+   VERIFY TICKET (QR SCAN)
+========================= */
+router.get("/verify/:ticketId", auth, async (req, res) => {
+  try {
+    const ticket = await Registration.findById(req.params.ticketId)
+      .populate("event user");
+
+    if (!ticket) {
+      return res.status(404).json({ message: "Invalid ticket" });
+    }
+
+    res.json({
+      valid: true,
+      ticket,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 
 
 module.exports = router;

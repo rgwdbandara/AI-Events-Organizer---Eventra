@@ -1,12 +1,37 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { QRCodeSVG } from "qrcode.react";
+
+
 
 const API_URL = "http://localhost:5000/api/registrations";
 
 export default function MyTickets() {
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const handleCancel = async (ticketId) => {
+    if (!window.confirm("Are you sure you want to cancel this ticket?")) return;
+
+    try {
+      const token = localStorage.getItem("token");
+
+      await axios.delete(
+        `http://localhost:5000/api/registrations/${ticketId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setTickets((prev) => prev.filter((ticket) => ticket._id !== ticketId));
+      alert("Ticket cancelled successfully");
+    } catch (error) {
+      alert(error.response?.data?.message || "Failed to cancel ticket");
+    }
+  };
 
   useEffect(() => {
     const fetchTickets = async () => {
@@ -57,18 +82,38 @@ export default function MyTickets() {
                 {ticket.event.title}
               </h2>
 
-              <div className="mb-4 space-y-1 text-sm text-gray-300">
+              <div className="mb-3 space-y-1 text-sm text-gray-300">
                 <p>📅 {ticket.event.date}</p>
                 <p>⏰ {ticket.event.time}</p>
                 <p>📍 {ticket.event.location}</p>
               </div>
 
-              <Link
-                to={`/events/${ticket.event._id}`}
-                className="inline-block px-3 py-1 text-sm bg-blue-600 rounded hover:bg-blue-700"
-              >
-                View Event
-              </Link>
+              {/* 🎟 QR CODE */}
+              <div className="flex justify-center p-2 my-4 bg-white rounded">
+                <QRCodeSVG
+                  value={JSON.stringify({
+                    ticketId: ticket._id,
+                    eventId: ticket.event._id,
+                  })}
+                  size={150}
+                />
+              </div>
+
+              <div className="flex items-center justify-between">
+                <Link
+                  to={`/events/${ticket.event._id}`}
+                  className="text-sm text-blue-400 hover:underline"
+                >
+                  View Event
+                </Link>
+
+                <button
+                  onClick={() => handleCancel(ticket._id)}
+                  className="text-sm text-red-400 hover:underline"
+                >
+                  Cancel Ticket
+                </button>
+              </div>
             </div>
           ))}
         </div>
