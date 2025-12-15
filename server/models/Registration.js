@@ -12,6 +12,10 @@ const registrationSchema = new mongoose.Schema(
       ref: "Event",
       required: true,
     },
+    checkedIn: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

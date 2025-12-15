@@ -28,6 +28,8 @@ export default function Navbar() {
           <Link to="/explore">Explore</Link>
           <Link to="/my-events">My Events</Link>
           <Link to="/my-tickets">My Tickets</Link>
+          <Link to="/check-in">Check-in</Link>
+
 
 
 
@@ -45,8 +47,7 @@ export default function Navbar() {
             <>
               <Link to="/login">Login</Link>
               <Link to="/register">Register</Link>
-              <Link to="/my-events">My Events</Link>
-              <Link to="/my-tickets">My Tickets</Link>
+              
 
 
             </>
@@ -65,8 +66,14 @@ export default function Navbar() {
       {/* Mobile menu */}
       {open && (
         <div className="flex flex-col gap-4 mt-4 md:hidden">
-          <Link to="/events">Events</Link>
-          <Link to="/explore">Explore</Link>
+     <Link to="/login">Login</Link>
+              <Link to="/register">Register</Link>
+              <Link to="/my-events">My Events</Link>
+              <Link to="/my-tickets">My Tickets</Link>
+              <Link to="/check-in">Check-in</Link>
+
+
+
 
           {isLoggedIn ? (
             <>

@@ -17,10 +17,16 @@ export default function Login() {
         password,
       });
 
-      // Save token
+      // Save token and user
+      localStorage.setItem("user", JSON.stringify(res.data.user));
       localStorage.setItem("token", res.data.token);
 
-      navigate("/");
+      // Check if user is onboarded
+      if (!res.data.user.onboarded) {
+        navigate("/onboarding");
+      } else {
+        navigate("/events");
+      }
     } catch (err) {
       setError("Invalid email or password");
     }

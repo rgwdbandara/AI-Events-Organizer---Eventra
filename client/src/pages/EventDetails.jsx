@@ -1,30 +1,21 @@
 import { useEffect, useState } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 
 const API_URL = "http://localhost:5000/api/events";
 
 export default function EventDetails() {
-  const { id } = useParams(); // 🔑 event id from URL
-  const navigate = useNavigate();
-
+  const { id } = useParams();
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [registeredCount, setRegisteredCount] = useState(0);
 
   useEffect(() => {
     const fetchEvent = async () => {
       try {
         const res = await axios.get(`${API_URL}/${id}`);
         setEvent(res.data);
-
-        const countRes = await axios.get(
-          `http://localhost:5000/api/registrations/count/${id}`
-        );
-        setRegisteredCount(countRes.data.count);
       } catch (err) {
-        setError("Failed to load event");
+        console.error("Failed to load event", err);
       } finally {
         setLoading(false);
       }
@@ -33,98 +24,99 @@ export default function EventDetails() {
     fetchEvent();
   }, [id]);
 
-  const token = localStorage.getItem("token");
-
-  const handleRegister = async () => {
-    try {
-      const res = await axios.post(
-        `http://localhost:5000/api/registrations/${event._id}`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setRegisteredCount((prev) => prev + 1);
-      alert(res.data?.message || "Seat booked successfully");
-    } catch (err) {
-      alert(err.response?.data?.message || "Registration failed");
-    }
-  };
-
   if (loading) {
-    return <p className="p-6 text-gray-400">Loading event...</p>;
-  }
-
-  if (error) {
-    return <p className="p-6 text-red-500">{error}</p>;
+    return (
+      <div className="flex items-center justify-center min-h-screen text-gray-400">
+        Loading event...
+      </div>
+    );
   }
 
   if (!event) {
-    return <p className="p-6 text-gray-400">Event not found</p>;
+    return (
+      <div className="flex items-center justify-center min-h-screen text-red-500">
+        Event not found
+      </div>
+    );
   }
 
   return (
-    <div className="min-h-screen p-6 text-white bg-gray-900">
-      <div className="max-w-3xl p-6 mx-auto bg-gray-800 rounded-lg shadow-lg">
-        <h1 className="mb-4 text-3xl font-bold text-blue-400">
-          {event.title}
-        </h1>
+    <div className="min-h-screen bg-[#f6f2ee] px-6 py-12">
+      <div className="grid items-center max-w-6xl gap-10 mx-auto md:grid-cols-2">
 
-        <p className="mb-4 text-gray-300">{event.description}</p>
-
-        <div className="space-y-2 text-gray-400">
-          <p>📅 Date: {event.date}</p>
-          <p>⏰ Time: {event.time}</p>
-          <p>📍 Location: {event.location}</p>
-          <p>🏷 Category: {event.category}</p>
-          <p>
-            👤 Organizer:{" "}
-            <span className="text-gray-300">
-              {event.organizer?.name}
-            </span>
-          </p>
-          <p>✅ Registered: {registeredCount} people</p>
-          <p className="mt-2 text-gray-400">
-            Seats booked: {registeredCount} / {event.capacity}
-          </p>
-
-          {registeredCount >= event.capacity && (
-            <p className="mt-2 font-semibold text-red-400">
-              All seats are booked
-            </p>
-          )}
+        {/* LEFT IMAGE */}
+        <div className="rounded-[40px] overflow-hidden shadow-lg">
+          <img
+            src={
+              event.imageUrl ||
+              "https://images.unsplash.com/photo-1515165562835-c3b8c62c51b1"
+            }
+            alt={event.title}
+            className="object-cover w-full h-full"
+          />
         </div>
 
-        {token && (
-          <button
-            disabled={registeredCount >= event.capacity}
-            onClick={handleRegister}
-            className={`mt-6 px-4 py-2 rounded ${
-              registeredCount >= event.capacity
-                ? "bg-gray-500 cursor-not-allowed"
-                : "bg-green-600 hover:bg-green-700"
-            }`}
-          >
-            Book Seat
-          </button>
-        )}
+        {/* RIGHT CONTENT */}
+        <div className="space-y-6">
+          <div>
+            <p className="text-sm tracking-widest text-gray-500 uppercase">
+              {event.category}
+            </p>
+            <h1 className="mt-2 text-4xl font-bold text-gray-900">
+              {event.title}
+            </h1>
+          </div>
 
-        <div className="flex gap-4 mt-6">
-          <button
-            onClick={() => navigate(-1)}
-            className="px-4 py-2 bg-gray-600 rounded hover:bg-gray-700"
-          >
-            Back
-          </button>
+          <p className="leading-relaxed text-gray-700">
+            {event.description}
+          </p>
 
-          <Link
-            to="/events"
-            className="px-4 py-2 bg-blue-600 rounded hover:bg-blue-700"
-          >
-            All Events
-          </Link>
+          <div className="grid grid-cols-2 gap-4 text-sm text-gray-700">
+            <p>📅 <span className="font-medium">{event.date}</span></p>
+            <p>⏰ <span className="font-medium">{event.time}</span></p>
+            <p>📍 <span className="font-medium">{event.location}</span></p>
+            <p>🪑 <span className="font-medium">
+              Capacity: {event.capacity || "Unlimited"}
+            </span></p>
+          </div>
+
+          <button className="px-8 py-3 text-white transition bg-black rounded-full hover:bg-gray-800">
+            Book Now
+          </button>
+        </div>
+      </div>
+
+      {/* POPULAR EVENTS SECTION */}
+      <div className="max-w-6xl mx-auto mt-20">
+        <h2 className="mb-6 text-2xl font-semibold text-gray-800">
+          Popular Events
+        </h2>
+
+        <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
+          {[1, 2, 3].map((item) => (
+            <div
+              key={item}
+              className="overflow-hidden transition bg-white shadow rounded-2xl hover:shadow-lg"
+            >
+              <img
+                src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d"
+                className="object-cover w-full h-40"
+              />
+
+              <div className="p-4">
+                <h3 className="font-semibold text-gray-800">
+                  Sample Event
+                </h3>
+                <p className="text-sm text-gray-500">
+                  Workshop • Networking
+                </p>
+
+                <button className="px-4 py-1 mt-3 text-sm text-orange-800 bg-orange-200 rounded-full">
+                  Buy Now
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>

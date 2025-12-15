@@ -17,8 +17,8 @@ export default function Explore() {
         `${API_URL}?search=${search}&category=${category}`
       );
       setEvents(res.data);
-    } catch (error) {
-      console.error("Failed to fetch events", error);
+    } catch (err) {
+      console.error("Failed to fetch events", err);
     } finally {
       setLoading(false);
     }
@@ -29,64 +29,83 @@ export default function Explore() {
   }, [search, category]);
 
   return (
-    <div className="min-h-screen p-6 text-white bg-gray-900">
-      <h1 className="mb-6 text-4xl font-bold">Explore Events</h1>
+    <div className="flex min-h-screen bg-[#0b1120] text-white">
+      {/* ================= LEFT SIDEBAR ================= */}
+      <aside className="w-72 p-6 bg-[#0f172a] border-r border-gray-800">
+        <h2 className="mb-6 text-xl font-bold">Explore</h2>
 
-      {/* Search & Filter */}
-      <div className="flex flex-col gap-4 mb-8 md:flex-row">
+        {/* Search */}
         <input
           type="text"
           placeholder="Search events..."
-          className="w-full p-3 bg-gray-800 rounded md:w-1/2"
+          className="w-full p-3 mb-4 bg-gray-800 rounded"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
 
+        {/* Category Filter */}
         <select
-          className="w-full p-3 bg-gray-800 rounded md:w-1/4"
+          className="w-full p-3 mb-4 bg-gray-800 rounded"
           value={category}
           onChange={(e) => setCategory(e.target.value)}
         >
-          <option value="All">All</option>
+          <option value="All">All Categories</option>
           <option value="Technology">Technology</option>
           <option value="Education">Education</option>
           <option value="Business">Business</option>
           <option value="Workshop">Workshop</option>
         </select>
-      </div>
 
-      {/* Events Grid */}
-      {loading ? (
-        <p className="text-gray-400">Loading events...</p>
-      ) : (
-        <div className="grid gap-6 md:grid-cols-3">
-          {events.map((event) => (
-            <Link
-              key={event._id}
-              to={`/events/${event._id}`}
-              className="p-5 transition bg-gray-800 rounded-lg hover:scale-105"
-            >
-              <h2 className="text-xl font-semibold text-blue-400">
-                {event.title}
-              </h2>
+        <p className="mt-6 text-sm text-gray-400">
+          Discover events curated for you 🚀
+        </p>
+      </aside>
 
-              <p className="mt-2 text-gray-300 line-clamp-3">
-                {event.description}
-              </p>
+      {/* ================= MAIN CONTENT ================= */}
+      <main className="flex-1 p-8">
+        <h1 className="mb-6 text-3xl font-bold">Discover Events</h1>
 
-              <div className="mt-4 space-y-1 text-sm text-gray-400">
-                <p>📍 {event.location}</p>
-                <p>📅 {event.date}</p>
-                <p>🏷 {event.category}</p>
+        {loading ? (
+          <p className="text-gray-400">Loading events...</p>
+        ) : events.length === 0 ? (
+          <p className="text-gray-400">No events found.</p>
+        ) : (
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {events.map((event) => (
+              <div
+                key={event._id}
+                className="text-gray-900 transition bg-white shadow-md rounded-xl hover:-translate-y-1"
+              >
+                <div className="p-4">
+                  <span className="inline-block px-2 py-1 mb-2 text-xs text-blue-600 bg-blue-100 rounded">
+                    {event.category}
+                  </span>
+
+                  <h3 className="text-lg font-semibold">
+                    {event.title}
+                  </h3>
+
+                  <p className="mt-1 text-sm text-gray-600 line-clamp-2">
+                    {event.description}
+                  </p>
+
+                  <div className="mt-3 space-y-1 text-xs text-gray-500">
+                    <p>📅 {event.date}</p>
+                    <p>📍 {event.location}</p>
+                  </div>
+
+                  <Link
+                    to={`/events/${event._id}`}
+                    className="inline-block mt-4 text-sm font-medium text-blue-600 hover:underline"
+                  >
+                    View Details →
+                  </Link>
+                </div>
               </div>
-            </Link>
-          ))}
-        </div>
-      )}
-
-      {!loading && events.length === 0 && (
-        <p className="mt-6 text-gray-400">No events found.</p>
-      )}
+            ))}
+          </div>
+        )}
+      </main>
     </div>
   );
 }

@@ -11,9 +11,8 @@ import LandingPage from "./pages/LandingPage";
 import Explore from "./pages/Explore";
 import MyEvents from "./pages/MyEvents";
 import MyTickets from "./pages/MyTickets";
-
-
-
+import CheckIn from "./pages/CheckIn";
+import Onboarding from "./pages/Onboarding";
 
 
 
@@ -75,6 +74,26 @@ function App() {
     </ProtectedRoute>
   }
 />
+
+<Route
+  path="/check-in"
+  element={
+    <ProtectedRoute>
+      <CheckIn />
+    </ProtectedRoute>
+  }
+/>
+
+
+<Route
+  path="/onboarding"
+  element={
+    <ProtectedRoute>
+      <Onboarding />
+    </ProtectedRoute>
+  }
+/>
+
 
 
       </Routes>

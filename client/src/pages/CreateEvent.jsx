@@ -9,7 +9,8 @@ export default function CreateEvent() {
   const [time, setTime] = useState("");
   const [location, setLocation] = useState("");
   const [category, setCategory] = useState("");
-  const [capacity, setCapacity] = useState(""); // ✅ NEW
+  const [capacity, setCapacity] = useState("");
+  const [imageUrl, setImageUrl] = useState(""); 
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
