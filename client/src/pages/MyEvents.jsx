@@ -30,9 +30,34 @@ export default function MyEvents() {
     fetchMyEvents();
   }, []);
 
+  const handleDelete = async (eventId) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this event?"
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+      const token = localStorage.getItem("token");
+
+      await axios.delete(`${API_URL}/${eventId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      // Remove deleted event from UI
+      setEvents((prev) =>
+        prev.filter((event) => event._id !== eventId)
+      );
+    } catch (error) {
+      alert("Failed to delete event");
+    }
+  };
+
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-gray-400 bg-gray-900">
+      <div className="flex items-center justify-center min-h-screen text-gray-400 bg-gray-900">
         Loading your events...
       </div>
     );
@@ -75,6 +100,13 @@ export default function MyEvents() {
                 >
                   Edit
                 </Link>
+
+                <button
+                  onClick={() => handleDelete(event._id)}
+                  className="px-3 py-1 text-sm bg-red-600 rounded hover:bg-red-700"
+                >
+                  Delete
+                </button>
               </div>
             </div>
           ))}

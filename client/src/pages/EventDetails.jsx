@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import ExploreCarousel from "../components/ExploreCarousel";
+
 
 const API_URL = "http://localhost:5000/api/events";
 
@@ -8,6 +10,7 @@ export default function EventDetails() {
   const { id } = useParams();
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
+  
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -86,43 +89,8 @@ export default function EventDetails() {
         </div>
       </div>
 
-      {/* POPULAR EVENTS SECTION */}
-      <div className="max-w-6xl mx-auto mt-20">
-        <h2 className="mb-6 text-2xl font-semibold text-gray-800">
-          Popular Events
-        </h2>
-
-        <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
-          {[1, 2, 3].map((item) => (
-            <div
-              key={item}
-              className="overflow-hidden transition bg-white shadow rounded-2xl hover:shadow-lg"
-            >
-              {/* TOP of card image */}
-              {event.imageUrl && (
-                <img
-                  src={event.imageUrl}
-                  alt={event.title}
-                  className="object-cover w-full h-64 mb-4 rounded"
-                />
-              )}
-
-              <div className="p-4">
-                <h3 className="font-semibold text-gray-800">
-                  Sample Event
-                </h3>
-                <p className="text-sm text-gray-500">
-                  Workshop • Networking
-                </p>
-
-                <button className="px-4 py-1 mt-3 text-sm text-orange-800 bg-orange-200 rounded-full">
-                  Buy Now
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+      {/* 🔁 Explore More Events */}
+      <ExploreCarousel currentEventId={event._id} />
     </div>
   );
 }
