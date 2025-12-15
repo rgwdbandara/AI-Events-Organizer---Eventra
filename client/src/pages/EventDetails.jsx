@@ -98,10 +98,14 @@ export default function EventDetails() {
               key={item}
               className="overflow-hidden transition bg-white shadow rounded-2xl hover:shadow-lg"
             >
-              <img
-                src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d"
-                className="object-cover w-full h-40"
-              />
+              {/* TOP of card image */}
+              {event.imageUrl && (
+                <img
+                  src={event.imageUrl}
+                  alt={event.title}
+                  className="object-cover w-full h-64 mb-4 rounded"
+                />
+              )}
 
               <div className="p-4">
                 <h3 className="font-semibold text-gray-800">

@@ -1,44 +1,57 @@
 import { useState } from "react";
-import api from "../api/api";
 import { useNavigate } from "react-router-dom";
+import api from "../api/api";
 
 export default function CreateEvent() {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [date, setDate] = useState("");
-  const [time, setTime] = useState("");
-  const [location, setLocation] = useState("");
-  const [category, setCategory] = useState("");
-  const [capacity, setCapacity] = useState("");
-  const [imageUrl, setImageUrl] = useState(""); 
-  const [error, setError] = useState("");
-
   const navigate = useNavigate();
 
+  // ✅ SINGLE FORM STATE
+  const [form, setForm] = useState({
+    title: "",
+    description: "",
+    date: "",
+    time: "",
+    location: "",
+    category: "",
+    imageUrl: "",
+    capacity: "",
+  });
+  const [image, setImage] = useState(null); // ✅ NEW
+  const [error, setError] = useState("");
+
+  // ✅ HANDLE INPUT CHANGE
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  // ✅ SUBMIT
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      await api.post(
-        "/events/create",
-        {
-          title,
-          description,
-          date,
-          time,
-          location,
-          category,
-          capacity, // ✅ SEND TO BACKEND
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
+    const formData = new FormData();
+    formData.append("title", form.title);
+    formData.append("description", form.description);
+    formData.append("date", form.date);
+    formData.append("time", form.time);
+    formData.append("location", form.location);
+    formData.append("category", form.category);
+    formData.append("capacity", form.capacity);
+    if (image) formData.append("image", image);
 
-      navigate("/");
+    try {
+      await api.post("/events/create", formData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      navigate("/events");
     } catch (err) {
+      console.error(err);
       setError("Failed to create event");
     }
   };
@@ -54,61 +67,85 @@ export default function CreateEvent() {
         {error && <p className="mb-3 text-red-400">{error}</p>}
 
         <input
+          name="title"
           className="w-full p-3 mb-3 bg-gray-700 rounded"
-          placeholder="Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Event Title"
+          value={form.title}
+          onChange={handleChange}
           required
         />
 
         <textarea
+          name="description"
           className="w-full p-3 mb-3 bg-gray-700 rounded"
           placeholder="Description"
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          value={form.description}
+          onChange={handleChange}
           required
         />
 
         <input
           type="date"
+          name="date"
           className="w-full p-3 mb-3 bg-gray-700 rounded"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
+          value={form.date}
+          onChange={handleChange}
           required
         />
 
         <input
           type="time"
+          name="time"
           className="w-full p-3 mb-3 bg-gray-700 rounded"
-          value={time}
-          onChange={(e) => setTime(e.target.value)}
+          value={form.time}
+          onChange={handleChange}
           required
         />
 
         <input
+          name="location"
           className="w-full p-3 mb-3 bg-gray-700 rounded"
           placeholder="Location"
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
+          value={form.location}
+          onChange={handleChange}
           required
         />
 
         <input
+          name="category"
           className="w-full p-3 mb-3 bg-gray-700 rounded"
           placeholder="Category"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
+          value={form.category}
+          onChange={handleChange}
           required
         />
 
-        {/* ✅ NEW CAPACITY INPUT */}
+        {/* 🖼 IMAGE URL */}
+        <input
+          name="imageUrl"
+          className="w-full p-3 mb-3 bg-gray-700 rounded"
+          placeholder="Image URL (optional)"
+          value={form.imageUrl}
+          onChange={handleChange}
+        />
+
+        {/* 📁 IMAGE FILE */}
+        <input
+          type="file"
+          accept="image/*"
+          className="w-full p-3 mb-3 bg-gray-700 rounded"
+          onChange={(e) => setImage(e.target.files[0])}
+        />
+
+        {/* 🪑 CAPACITY */}
         <input
           type="number"
+          name="capacity"
           min="1"
           className="w-full p-3 mb-6 bg-gray-700 rounded"
           placeholder="Max Seats"
-          value={capacity}
-          onChange={(e) => setCapacity(e.target.value)}
+          value={form.capacity}
+          onChange={handleChange}
           required
         />
 

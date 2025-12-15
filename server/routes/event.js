@@ -2,27 +2,40 @@ const express = require("express");
 const router = express.Router();
 const Event = require("../models/Event");
 const auth = require("../middlewares/auth");
+const upload = require("../middlewares/upload"); // added
 
 /* =========================
    CREATE EVENT (AUTH)
 ========================= */
-router.post("/create", auth, async (req, res) => {
-  try {
-    const event = new Event({
-      ...req.body,
-      organizer: req.user.id,
-    });
+router.post(
+  "/create",
+  auth,
+  upload.single("image"),
+  async (req, res) => {
+    try {
+      const event = new Event({
+        title: req.body.title,
+        description: req.body.description,
+        date: req.body.date,
+        time: req.body.time,
+        location: req.body.location,
+        category: req.body.category,
+        capacity: req.body.capacity,
+        imageUrl: req.file ? req.file.path : "",
+        organizer: req.user.id,
+      });
 
-    await event.save();
+      await event.save();
 
-    res.status(201).json({
-      message: "Event created successfully",
-      event,
-    });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+      res.status(201).json({
+        message: "Event created successfully",
+        event,
+      });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
   }
-});
+);
 
 /* =========================
    GET ALL EVENTS + SEARCH + FILTER (PUBLIC)
