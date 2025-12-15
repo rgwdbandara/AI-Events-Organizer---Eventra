@@ -13,6 +13,7 @@ export default function EditEvent() {
     time: "",
     location: "",
     category: "",
+    capacity: "",
   });
 
   const [error, setError] = useState("");
@@ -57,6 +58,8 @@ export default function EditEvent() {
           <input
             key={key}
             name={key}
+            type={key === "capacity" ? "number" : "text"}
+            min={key === "capacity" ? "1" : undefined}
             value={form[key]}
             onChange={handleChange}
             placeholder={key}

@@ -22,6 +22,22 @@ router.get("/my-tickets", auth, async (req, res) => {
 
 
 /* =========================
+   GET REGISTRATION COUNT
+========================= */
+router.get("/count/:eventId", async (req, res) => {
+  try {
+    const count = await Registration.countDocuments({
+      event: req.params.eventId,
+    });
+
+    res.json({ count });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+
+/* =========================
    REGISTER FOR EVENT (FREE)
 ========================= */
 router.post("/:eventId", auth, async (req, res) => {
@@ -32,11 +48,23 @@ router.post("/:eventId", auth, async (req, res) => {
       return res.status(404).json({ message: "Event not found" });
     }
 
-    // Prevent organizer registering
+    // Organizer cannot register
     if (event.organizer.toString() === req.user.id) {
-      return res
-        .status(400)
-        .json({ message: "Organizer cannot register for own event" });
+      return res.status(400).json({
+        message: "Organizer cannot register for own event",
+      });
+    }
+
+    // 🔢 COUNT CURRENT SEATS
+    const bookedSeats = await Registration.countDocuments({
+      event: event._id,
+    });
+
+    // 🚫 FULL
+    if (bookedSeats >= event.capacity) {
+      return res.status(400).json({
+        message: "All seats are booked",
+      });
     }
 
     const registration = new Registration({
@@ -46,10 +74,15 @@ router.post("/:eventId", auth, async (req, res) => {
 
     await registration.save();
 
-    res.status(201).json({ message: "Registered successfully" });
+    res.status(201).json({
+      message: "Seat booked successfully",
+      seatsLeft: event.capacity - (bookedSeats + 1),
+    });
   } catch (error) {
     if (error.code === 11000) {
-      return res.status(400).json({ message: "Already registered" });
+      return res.status(400).json({
+        message: "You already booked a seat",
+      });
     }
     res.status(500).json({ message: error.message });
   }

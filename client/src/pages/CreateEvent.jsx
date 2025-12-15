@@ -9,6 +9,7 @@ export default function CreateEvent() {
   const [time, setTime] = useState("");
   const [location, setLocation] = useState("");
   const [category, setCategory] = useState("");
+  const [capacity, setCapacity] = useState(""); // ✅ NEW
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
@@ -19,7 +20,15 @@ export default function CreateEvent() {
     try {
       await api.post(
         "/events/create",
-        { title, description, date, time, location, category },
+        {
+          title,
+          description,
+          date,
+          time,
+          location,
+          category,
+          capacity, // ✅ SEND TO BACKEND
+        },
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -84,10 +93,21 @@ export default function CreateEvent() {
         />
 
         <input
-          className="w-full p-3 mb-6 bg-gray-700 rounded"
+          className="w-full p-3 mb-3 bg-gray-700 rounded"
           placeholder="Category"
           value={category}
           onChange={(e) => setCategory(e.target.value)}
+          required
+        />
+
+        {/* ✅ NEW CAPACITY INPUT */}
+        <input
+          type="number"
+          min="1"
+          className="w-full p-3 mb-6 bg-gray-700 rounded"
+          placeholder="Max Seats"
+          value={capacity}
+          onChange={(e) => setCapacity(e.target.value)}
           required
         />
 
