@@ -101,29 +101,48 @@ router.get("/:id", async (req, res) => {
 /* =========================
    UPDATE EVENT (OWNER ONLY)
 ========================= */
-router.put("/:id", auth, async (req, res) => {
-  try {
-    const event = await Event.findById(req.params.id);
+router.put(
+  "/:id",
+  auth,
+  upload.single("image"),
+  async (req, res) => {
+    try {
+      const event = await Event.findById(req.params.id);
 
-    if (!event) {
-      return res.status(404).json({ message: "Event not found" });
+      if (!event) {
+        return res.status(404).json({ message: "Event not found" });
+      }
+
+      // owner check
+      if (event.organizer.toString() !== req.user.id) {
+        return res.status(403).json({ message: "Not authorized" });
+      }
+
+      // update fields
+      event.title = req.body.title;
+      event.description = req.body.description;
+      event.date = req.body.date;
+      event.time = req.body.time;
+      event.location = req.body.location;
+      event.category = req.body.category;
+      event.capacity = req.body.capacity;
+
+      // 🔥 IMPORTANT: image replace only if new image uploaded
+      if (req.file) {
+        event.imageUrl = req.file.path;
+      }
+
+      await event.save();
+
+      res.json({
+        message: "Event updated successfully",
+        event,
+      });
+    } catch (error) {
+      res.status(500).json({ message: error.message });
     }
-
-    if (event.organizer.toString() !== req.user.id) {
-      return res.status(403).json({ message: "Not authorized" });
-    }
-
-    const updatedEvent = await Event.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    );
-
-    res.json(updatedEvent);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
   }
-});
+);
 
 /* =========================
    DELETE EVENT (OWNER ONLY)
