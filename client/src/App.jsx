@@ -7,7 +7,7 @@ import CreateEvent from "./pages/CreateEvent";
 import EditEvent from "./pages/EditEvent";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import LandingPage from "./pages/LandingPage";
+import Home from "./pages/Home";
 import Explore from "./pages/Explore";
 import MyEvents from "./pages/MyEvents";
 import MyTickets from "./pages/MyTickets";
@@ -28,8 +28,9 @@ function App() {
       <Navbar />
 
       <Routes>
+        
         {/* Public Routes */}
-        <Route path="/" element={<LandingPage />} />
+        <Route path="/" element={<Home />} />
         <Route path="/events" element={<Events />} />
         <Route path="/events/:id" element={<EventDetails />} />
         <Route path="/login" element={<Login />} />

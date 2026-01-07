@@ -1,98 +1,88 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
 
 export default function Navbar() {
-  const [open, setOpen] = useState(false);
   const navigate = useNavigate();
-
-  // 🔑 SINGLE SOURCE OF TRUTH
   const token = localStorage.getItem("token");
-  const isLoggedIn = !!token;
 
-  const logout = () => {
+  const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     navigate("/login");
   };
 
   return (
-    <nav className="px-6 py-4 text-white bg-black border-b border-gray-800">
-      <div className="flex items-center justify-between">
-        <Link to="/" className="text-xl font-bold text-blue-400">
-          Eventra
+    <nav className="sticky top-0 z-50 bg-[#0b1120] border-b border-gray-800">
+      <div className="flex items-center justify-between px-8 py-4 mx-auto max-w-7xl">
+        
+        {/* 🔵 LEFT – LOGO */}
+        <Link
+          to="/"
+          className="text-2xl font-bold tracking-wide text-white"
+        >
+          Eventra<span className="text-indigo-400">.</span>
         </Link>
 
-        {/* Desktop */}
-        <div className="items-center hidden gap-6 md:flex">
-          <Link to="/events">Events</Link>
-          <Link to="/explore">Explore</Link>
-          <Link to="/my-events">My Events</Link>
-          <Link to="/my-tickets">My Tickets</Link>
-          <Link to="/check-in">Check-in</Link>
+        {/* 🟣 CENTER – NAV LINKS */}
+        <div className="hidden gap-8 md:flex">
+          <Link
+            to="/"
+            className="text-gray-300 hover:text-white"
+          >
+            Home
+          </Link>
 
+          <Link
+            to="/explore"
+            className="text-gray-300 hover:text-white"
+          >
+            Explore
+          </Link>
 
+          <Link
+            to="/pricing"
+            className="text-gray-300 hover:text-white"
+          >
+            Pricing
+          </Link>
+        </div>
 
-
-          {isLoggedIn ? (
+        {/* 🟢 RIGHT – ACTIONS */}
+        <div className="flex items-center gap-4">
+          {token ? (
             <>
-              <Link to="/create">Create</Link>
+              <Link
+                to="/create"
+                className="px-4 py-2 text-sm font-semibold text-white bg-indigo-600 rounded hover:bg-indigo-700"
+              >
+                + Create Event
+              </Link>
+
               <button
-                onClick={logout}
-                className="px-4 py-1 bg-red-500 rounded"
+                onClick={handleLogout}
+                className="text-sm text-gray-400 hover:text-white"
               >
                 Logout
               </button>
             </>
           ) : (
             <>
-              <Link to="/login">Login</Link>
-              <Link to="/register">Register</Link>
-              
+              <Link
+                to="/login"
+                className="text-gray-300 hover:text-white"
+              >
+                Login
+              </Link>
 
-
+              <Link
+                to="/register"
+                className="px-4 py-2 text-sm font-semibold text-black bg-white rounded hover:bg-gray-200"
+              >
+                Get Started
+              </Link>
             </>
           )}
         </div>
-
-        {/* Mobile toggle */}
-        <button
-          className="text-2xl md:hidden"
-          onClick={() => setOpen(!open)}
-        >
-          ☰
-        </button>
       </div>
-
-      {/* Mobile menu */}
-      {open && (
-        <div className="flex flex-col gap-4 mt-4 md:hidden">
-     <Link to="/login">Login</Link>
-              <Link to="/register">Register</Link>
-              <Link to="/my-events">My Events</Link>
-              <Link to="/my-tickets">My Tickets</Link>
-              <Link to="/check-in">Check-in</Link>
-
-
-
-
-          {isLoggedIn ? (
-            <>
-              <Link to="/create">Create</Link>
-              <button
-                onClick={logout}
-                className="text-left text-red-400"
-              >
-                Logout
-              </button>
-            </>
-          ) : (
-            <>
-              <Link to="/login">Login</Link>
-              <Link to="/register">Register</Link>
-            </>
-          )}
-        </div>
-      )}
     </nav>
   );
 }
