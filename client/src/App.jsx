@@ -28,7 +28,7 @@ function App() {
       <Navbar />
 
       <Routes>
-        
+
         {/* Public Routes */}
         <Route path="/" element={<Home />} />
         <Route path="/events" element={<Events />} />
@@ -36,6 +36,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/explore" element={<Explore />} />
+        <Route path="/my-tickets" element={<MyTickets />} />
 
 
 

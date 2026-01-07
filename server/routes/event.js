@@ -3,6 +3,8 @@ const router = express.Router();
 const Event = require("../models/Event");
 const auth = require("../middlewares/auth");
 const upload = require("../middlewares/upload"); // added
+const Registration = require("../models/Registration");
+
 
 /* =========================
    CREATE EVENT (AUTH)

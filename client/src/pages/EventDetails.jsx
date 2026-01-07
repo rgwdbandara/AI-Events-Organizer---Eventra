@@ -1,16 +1,19 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import api from "../api/api";
 import ExploreCarousel from "../components/ExploreCarousel";
-
 
 const API_URL = "http://localhost:5000/api/events";
 
 export default function EventDetails() {
   const { id } = useParams();
+  const navigate = useNavigate();
+
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
-  
+  const [showRegister, setShowRegister] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -23,13 +26,31 @@ export default function EventDetails() {
         setLoading(false);
       }
     };
-
     fetchEvent();
   }, [id]);
 
+  const handleRegister = async () => {
+    try {
+      await api.post(
+        `/registrations/${event._id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      setShowRegister(false);
+      setShowSuccess(true);
+    } catch (error) {
+      alert(error.response?.data?.message || "Registration failed");
+    }
+  };
+
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen text-gray-400">
+      <div className="flex items-center justify-center min-h-screen bg-[#0b1120] text-gray-400">
         Loading event...
       </div>
     );
@@ -37,60 +58,102 @@ export default function EventDetails() {
 
   if (!event) {
     return (
-      <div className="flex items-center justify-center min-h-screen text-red-500">
+      <div className="flex items-center justify-center min-h-screen bg-[#0b1120] text-red-500">
         Event not found
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#f6f2ee] px-6 py-12">
-      <div className="grid items-center max-w-6xl gap-10 mx-auto md:grid-cols-2">
-
-        {/* LEFT IMAGE */}
-        <div className="rounded-[40px] overflow-hidden shadow-lg">
+    <div className="min-h-screen bg-[#0b1120] text-white">
+      {/* IMAGE HEADER */}
+      {event.imageUrl && (
+        <div className="relative w-full h-[420px]">
           <img
-            src={
-              event.imageUrl ||
-              "https://images.unsplash.com/photo-1515165562835-c3b8c62c51b1"
-            }
+            src={event.imageUrl}
             alt={event.title}
             className="object-cover w-full h-full"
           />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0b1120] via-black/30 to-transparent" />
+          <div className="absolute bottom-10 left-10">
+            <span className="px-3 py-1 bg-purple-600 rounded">
+              {event.category}
+            </span>
+            <h1 className="mt-2 text-4xl font-bold">{event.title}</h1>
+            <p className="text-gray-300">
+              📅 {event.date} • ⏰ {event.time} • 📍 {event.location}
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* MAIN */}
+      <div className="grid max-w-6xl grid-cols-1 gap-8 p-10 mx-auto lg:grid-cols-3">
+        <div className="space-y-6 lg:col-span-2">
+          <div className="bg-[#111827] p-6 rounded-xl">
+            <h2 className="mb-3 text-2xl font-bold">About This Event</h2>
+            <p className="text-gray-300">{event.description}</p>
+          </div>
         </div>
 
-        {/* RIGHT CONTENT */}
-        <div className="space-y-6">
-          <div>
-            <p className="text-sm tracking-widest text-gray-500 uppercase">
-              {event.category}
-            </p>
-            <h1 className="mt-2 text-4xl font-bold text-gray-900">
-              {event.title}
-            </h1>
-          </div>
+        <div className="bg-[#111827] p-6 rounded-xl h-fit sticky top-10">
+          <p className="mb-4 text-3xl font-bold text-green-400">Free</p>
 
-          <p className="leading-relaxed text-gray-700">
-            {event.description}
-          </p>
-
-          <div className="grid grid-cols-2 gap-4 text-sm text-gray-700">
-            <p>📅 <span className="font-medium">{event.date}</span></p>
-            <p>⏰ <span className="font-medium">{event.time}</span></p>
-            <p>📍 <span className="font-medium">{event.location}</span></p>
-            <p>🪑 <span className="font-medium">
-              Capacity: {event.capacity || "Unlimited"}
-            </span></p>
-          </div>
-
-          <button className="px-8 py-3 text-white transition bg-black rounded-full hover:bg-gray-800">
-            Book Now
+          <button
+            onClick={() => setShowRegister(true)}
+            className="w-full py-3 font-semibold text-black bg-white rounded-lg"
+          >
+            Register for Event
           </button>
         </div>
       </div>
 
-      {/* 🔁 Explore More Events */}
-      <ExploreCarousel currentEventId={event._id} />
+      <ExploreCarousel />
+
+      {/* REGISTER MODAL */}
+      {showRegister && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+          <div className="bg-[#111827] p-6 rounded-lg w-full max-w-md">
+            <h2 className="mb-4 text-lg font-semibold">
+              Register for {event.title}
+            </h2>
+
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setShowRegister(false)}
+                className="px-4 py-2 bg-gray-600 rounded"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleRegister}
+                className="px-4 py-2 font-semibold text-black bg-white rounded"
+              >
+                Register
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* SUCCESS MODAL */}
+      {showSuccess && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+          <div className="bg-[#111827] p-6 rounded-lg w-full max-w-md text-center">
+            <h2 className="mb-2 text-xl font-bold">You're All Set 🎉</h2>
+            <p className="mb-4 text-gray-400">
+              Your ticket has been successfully booked.
+            </p>
+
+            <button
+              onClick={() => navigate("/my-tickets")}
+              className="w-full py-2 font-semibold text-black bg-white rounded"
+            >
+              View My Ticket
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
