@@ -27,4 +27,3 @@ router.post("/onboarding", auth, async (req, res) => {
 });
 
 module.exports = router;
-
