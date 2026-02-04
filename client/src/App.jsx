@@ -12,10 +12,11 @@ import CreateEvent from "./pages/CreateEvent";
 import EditEvent from "./pages/EditEvent";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import MyEvents from "./pages/MyEvents";
 import MyTickets from "./pages/MyTickets";
 import CheckIn from "./pages/CheckIn";
 import Onboarding from "./pages/Onboarding";
+import OrganizerDashboard from "./pages/OrganizerDashboard";
+import EventRegistrations from "./pages/EventRegistrations";
 
 function App() {
   return (
@@ -55,15 +56,6 @@ function App() {
 
         {/* ================= PROTECTED ================= */}
         <Route
-          path="/my-events"
-          element={
-            <ProtectedRoute>
-              <MyEvents />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
           path="/my-tickets"
           element={
             <ProtectedRoute>
@@ -88,6 +80,12 @@ function App() {
               <Onboarding />
             </ProtectedRoute>
           }
+        />
+
+        <Route path="/organizer/dashboard" element={<OrganizerDashboard />} />
+        <Route
+          path="/organizer/events/:eventId"
+          element={<EventRegistrations />}
         />
       </Routes>
     </Router>

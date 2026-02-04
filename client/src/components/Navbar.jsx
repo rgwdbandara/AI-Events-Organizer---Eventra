@@ -40,8 +40,12 @@ export default function Navbar() {
                 My Tickets
               </Link>
 
-              <Link to="/my-events" className="hover:text-white">
-                My Events
+
+              <Link
+                to="/organizer/dashboard"
+                className="px-3 py-2 text-sm hover:text-indigo-400"
+              >
+                Organizer Dashboard
               </Link>
             </>
           )}

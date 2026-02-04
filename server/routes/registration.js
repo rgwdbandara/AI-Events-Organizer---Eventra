@@ -61,6 +61,36 @@ router.get("/my", auth, async (req, res) => {
 });
 
 /* =========================
+   GET REGISTRATIONS BY EVENT (ORGANIZER)
+========================= */
+router.get("/event/:eventId", auth, async (req, res) => {
+  try {
+    const registrations = await Registration.find({
+      event: req.params.eventId,
+    })
+      .populate("user", "name email")
+      .populate("event");
+
+    if (registrations.length === 0) {
+      return res.json([]);
+    }
+
+    // Organizer-only access
+    if (
+      registrations[0].event.organizer.toString() !== req.user.id
+    ) {
+      return res.status(403).json({
+        message: "Not authorized",
+      });
+    }
+
+    res.json(registrations);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+/* =========================
    CANCEL TICKET
 ========================= */
 router.delete("/:ticketId", auth, async (req, res) => {
