@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 export default function Navbar() {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
+  const user = JSON.parse(localStorage.getItem("user")); // optional
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -11,64 +12,48 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="sticky top-0 z-50 bg-[#0b1120] border-b border-gray-800">
-      <div className="flex items-center justify-between px-8 py-4 mx-auto max-w-7xl">
+    <nav className="bg-[#0b1120] border-b border-white/10 px-8 py-4">
+      <div className="flex items-center justify-between mx-auto max-w-7xl">
         
-        {/* 🔵 LEFT – LOGO */}
-        <Link
-          to="/"
-          className="text-2xl font-bold tracking-wide text-white"
-        >
-          Eventra<span className="text-indigo-400">.</span>
+        {/* LEFT: LOGO */}
+        <Link to="/" className="text-2xl font-bold text-purple-500">
+          Eventra
         </Link>
 
-        {/* 🟣 CENTER – NAV LINKS */}
-        <div className="hidden gap-8 md:flex">
-          <Link
-            to="/"
-            className="text-gray-300 hover:text-white"
-          >
+        {/* CENTER: NAV LINKS */}
+        <div className="flex items-center gap-6 text-sm font-medium text-gray-300">
+          <Link to="/" className="hover:text-white">
             Home
           </Link>
 
-          <Link
-            to="/explore"
-            className="text-gray-300 hover:text-white"
-          >
+          <Link to="/explore" className="hover:text-white">
             Explore
           </Link>
 
-          <Link
-            to="/pricing"
-            className="text-gray-300 hover:text-white"
-          >
-            Pricing
-          </Link>
-        </div>
-
-        {/* 🟢 RIGHT – ACTIONS */}
-        <div className="flex items-center gap-4">
-          {token ? (
+          {token && (
             <>
-              <Link
-                to="/create"
-                className="px-4 py-2 text-sm font-semibold text-white bg-indigo-600 rounded hover:bg-indigo-700"
-              >
-                + Create Event
+              <Link to="/events/create" className="hover:text-white">
+                Create Event
               </Link>
 
-              <button
-                onClick={handleLogout}
-                className="text-sm text-gray-400 hover:text-white"
-              >
-                Logout
-              </button>
+              <Link to="/my-tickets" className="hover:text-white">
+                My Tickets
+              </Link>
+
+              <Link to="/my-events" className="hover:text-white">
+                My Events
+              </Link>
             </>
-          ) : (
+          )}
+        </div>
+
+        {/* RIGHT: AUTH ACTIONS */}
+        <div className="flex items-center gap-4">
+          {!token ? (
             <>
               <Link
                 to="/login"
-                className="text-gray-300 hover:text-white"
+                className="px-4 py-2 text-sm text-gray-300 border border-gray-600 rounded hover:text-white hover:border-white"
               >
                 Login
               </Link>
@@ -77,8 +62,29 @@ export default function Navbar() {
                 to="/register"
                 className="px-4 py-2 text-sm font-semibold text-black bg-white rounded hover:bg-gray-200"
               >
-                Get Started
+                Sign Up
               </Link>
+            </>
+          ) : (
+            <>
+              {/* USER NAME / AVATAR */}
+              <div className="flex items-center gap-2 px-3 py-1 border rounded-full border-white/20">
+                <div className="flex items-center justify-center w-8 h-8 text-sm font-bold text-white bg-purple-600 rounded-full">
+                  {user?.name?.charAt(0) || "U"}
+                </div>
+
+                <span className="text-sm text-gray-300">
+                  {user?.name || "Account"}
+                </span>
+              </div>
+
+              {/* LOGOUT */}
+              <button
+                onClick={handleLogout}
+                className="px-4 py-2 text-sm text-red-400 border rounded border-red-400/40 hover:bg-red-500 hover:text-white"
+              >
+                Logout
+              </button>
             </>
           )}
         </div>
