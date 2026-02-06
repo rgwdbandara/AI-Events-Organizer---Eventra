@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import api from "../api/api";
 import ExploreCarousel from "../components/ExploreCarousel";
+import TicketModal from "../components/TicketModal";
 
 const API_URL = "http://localhost:5000/api/events";
 
@@ -14,6 +15,7 @@ export default function EventDetails() {
   const [loading, setLoading] = useState(true);
   const [showRegister, setShowRegister] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [registeredTicket, setRegisteredTicket] = useState(null);
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -31,7 +33,7 @@ export default function EventDetails() {
 
   const handleRegister = async () => {
     try {
-      await api.post(
+      const res = await api.post(
         `/registrations/${event._id}`,
         {},
         {
@@ -41,6 +43,7 @@ export default function EventDetails() {
         }
       );
 
+      setRegisteredTicket(res.data);
       setShowRegister(false);
       setShowSuccess(true);
     } catch (error) {
@@ -97,7 +100,17 @@ export default function EventDetails() {
         </div>
 
         <div className="bg-[#111827] p-6 rounded-xl h-fit sticky top-10">
-          <p className="mb-4 text-3xl font-bold text-green-400">Free</p>
+          <h3 className="mb-2 text-lg font-semibold">Price</h3>
+
+          <div className="flex items-center gap-2 mb-4">
+            <span className="px-3 py-1 text-sm font-semibold text-green-400 rounded-full bg-green-400/10">
+              Free Event
+            </span>
+
+            <span className="px-3 py-1 text-xs text-gray-400 border border-gray-600 rounded-full">
+              Paid events coming soon
+            </span>
+          </div>
 
           <button
             onClick={() => setShowRegister(true)}
@@ -146,7 +159,10 @@ export default function EventDetails() {
             </p>
 
             <button
-              onClick={() => navigate("/my-tickets")}
+              onClick={() => {
+                setShowSuccess(false);
+                navigate("/my-tickets");
+              }}
               className="w-full py-2 font-semibold text-black bg-white rounded"
             >
               View My Ticket
@@ -154,6 +170,12 @@ export default function EventDetails() {
           </div>
         </div>
       )}
+
+      <TicketModal
+        open={!!registeredTicket}
+        ticket={registeredTicket}
+        onClose={() => setRegisteredTicket(null)}
+      />
     </div>
   );
 }

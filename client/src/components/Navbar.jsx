@@ -1,9 +1,31 @@
 import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 export default function Navbar() {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
-  const user = JSON.parse(localStorage.getItem("user")); // optional
+  const user = JSON.parse(localStorage.getItem("user"));
+  const [isVisible, setIsVisible] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY < lastScrollY) {
+        // Scrolling UP - show navbar
+        setIsVisible(true);
+      } else if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        // Scrolling DOWN - hide navbar (but keep it visible if near top)
+        setIsVisible(false);
+      }
+
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -12,12 +34,19 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-[#0b1120] border-b border-white/10 px-8 py-4">
+    <nav
+      className={`fixed top-0 left-0 right-0 bg-[#0b1120] border-b border-white/10 px-8 py-4 z-50 transition-transform duration-300 ${
+        isVisible ? "translate-y-0" : "-translate-y-full"
+      }`}
+    >
       <div className="flex items-center justify-between mx-auto max-w-7xl">
         
         {/* LEFT: LOGO */}
-        <Link to="/" className="text-2xl font-bold text-purple-500">
-          Eventra
+        <Link to="/" className="flex items-center gap-2">
+          <span className="text-2xl">🎟️</span>
+          <span className="text-xl font-bold text-transparent bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text">
+            Eventra
+          </span>
         </Link>
 
         {/* CENTER: NAV LINKS */}
@@ -39,7 +68,6 @@ export default function Navbar() {
               <Link to="/my-tickets" className="hover:text-white">
                 My Tickets
               </Link>
-
 
               <Link
                 to="/organizer/dashboard"
@@ -71,7 +99,6 @@ export default function Navbar() {
             </>
           ) : (
             <>
-              {/* USER NAME / AVATAR */}
               <div className="flex items-center gap-2 px-3 py-1 border rounded-full border-white/20">
                 <div className="flex items-center justify-center w-8 h-8 text-sm font-bold text-white bg-purple-600 rounded-full">
                   {user?.name?.charAt(0) || "U"}
@@ -82,7 +109,6 @@ export default function Navbar() {
                 </span>
               </div>
 
-              {/* LOGOUT */}
               <button
                 onClick={handleLogout}
                 className="px-4 py-2 text-sm text-red-400 border rounded border-red-400/40 hover:bg-red-500 hover:text-white"

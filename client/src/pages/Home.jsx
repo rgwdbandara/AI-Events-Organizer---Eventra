@@ -7,42 +7,42 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[#0b1120] text-white">
       {/* ================= HERO SECTION ================= */}
-      <section className="relative flex items-center justify-between px-10 py-24 overflow-hidden">
-        {/* LEFT CONTENT */}
-        <div className="relative z-10 max-w-xl">
-          <h1 className="font-bold leading-tight text-7xl">
-            Discover & <br />
-            create amazing{" "}
-            <span className="text-blue-400">events</span>.
-          </h1>
+      <section className="min-h-screen flex items-center bg-[#0b1120]">
+        <div className="grid items-center grid-cols-1 gap-12 px-10 mx-auto max-w-7xl lg:grid-cols-2">
+          
+          {/* LEFT CONTENT */}
+          <div>
+            <h1 className="text-5xl font-extrabold leading-tight lg:text-6xl">
+              Discover & <br />
+              create amazing{" "}
+              <span className="text-blue-400">events</span>.
+            </h1>
 
-          <p className="text-gray-300 mt-7">
-            Whether you're hosting or attending, Eventra makes
-            every event memorable. Join our community today.
-          </p>
+            <p className="max-w-xl mt-6 text-lg text-gray-300">
+              Whether you're hosting or attending, Eventra makes every
+              event memorable. Join our community today.
+            </p>
 
-          <div className="mt-8">
             <Link
               to="/explore"
-              className="inline-block px-8 py-4 font-semibold text-black bg-white rounded-full hover:bg-gray-200"
+              className="inline-block px-8 py-3 mt-8 text-sm font-semibold text-black transition bg-white rounded-full hover:bg-gray-200"
             >
               Get Started
             </Link>
           </div>
-        </div>
 
-        {/* RIGHT IMAGE / MOCKUP */}
-        <div className="relative hidden lg:block">
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0b1120] via-transparent to-transparent" />
-          <img
-            src="/hero.png"
-            alt="Event App Preview"
-            className="w-[300px] md:w-[450px] drop-shadow-2xl"
-          />
+          {/* RIGHT IMAGE */}
+          <div className="flex justify-center lg:justify-end">
+            <div className="relative">
+              <div className="absolute inset-0 rounded-full bg-purple-600/20 blur-3xl"></div>
+              <img
+                src="/hero.png"
+                alt="Event App Preview"
+                className="w-[360px] lg:w-[420px] drop-shadow-2xl"
+              />
+            </div>
+          </div>
         </div>
-
-        {/* BACKGROUND GLOW */}
-        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-purple-600/30 rounded-full blur-[200px]" />
       </section>
 
       {/* ================= DISCOVER EVENTS ================= */}

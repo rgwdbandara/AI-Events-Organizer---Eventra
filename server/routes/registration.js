@@ -112,4 +112,46 @@ router.delete("/:ticketId", auth, async (req, res) => {
   }
 });
 
+/* =========================
+   VERIFY TICKET (CHECK-IN)
+========================= */
+router.post("/verify/:ticketId", auth, async (req, res) => {
+  try {
+    const ticket = await Registration.findById(req.params.ticketId)
+      .populate("event");
+
+    if (!ticket) {
+      return res.status(404).json({ message: "Invalid ticket" });
+    }
+
+    // organizer only
+    if (ticket.event.organizer.toString() !== req.user.id) {
+      return res.status(403).json({ message: "Not authorized" });
+    }
+
+    // 🚫 already used
+    if (ticket.checkedIn) {
+      return res.status(400).json({ message: "Ticket already checked in" });
+    }
+
+    // ⏰ EXPIRY CHECK
+    const eventDateTime = new Date(
+      `${ticket.event.date}T${ticket.event.time}`
+    );
+
+    if (new Date() > eventDateTime) {
+      return res.status(400).json({
+        message: "Ticket expired (event already ended)",
+      });
+    }
+
+    ticket.checkedIn = true;
+    await ticket.save();
+
+    res.json({ message: "Check-in successful" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 module.exports = router;

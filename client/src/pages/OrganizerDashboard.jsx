@@ -101,7 +101,12 @@ export default function OrganizerDashboard() {
               {/* META */}
               <div className="mt-2 space-y-1 text-sm text-gray-400">
                 <p>📅 {event.date}</p>
-                <p>📍 {event.location}</p>
+                <p>
+                  📍 {event.location}
+                  <span className="ml-2 text-xs text-green-400 bg-green-400/10 px-2 py-0.5 rounded">
+                    Free
+                  </span>
+                </p>
                 <p>
                   🪑 Capacity:{" "}
                   <span className="text-white">

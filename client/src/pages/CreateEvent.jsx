@@ -98,6 +98,9 @@ export default function CreateEvent() {
           <p className="text-sm text-gray-300">
             Free plan – create your first event
           </p>
+          <p className="text-xs text-gray-400">
+            ℹ️ Currently supports free events only. Paid events coming soon.
+          </p>
         </div>
 
         <button
@@ -181,8 +184,14 @@ export default function CreateEvent() {
             <option>Business</option>
             <option>Workshop</option>
             <option>Education</option>
-            <option>Music</option>
+            <option>Entertainment</option>
             <option>Sports</option>
+            <option>Health</option>
+            <option>Networking</option>
+            <option>Arts</option>
+            <option>Food & Drink</option>
+            <option>Other</option>
+          
           </select>
 
           <input
