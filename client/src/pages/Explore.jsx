@@ -89,6 +89,13 @@ export default function Explore() {
                     {event.description}
                   </p>
 
+                  <p className="mt-1 text-xs text-gray-500">
+                    👤 Event by{" "}
+                    <span className="font-medium text-gray-700">
+                      {event.organizer?.name || "Unknown"}
+                    </span>
+                  </p>
+
                   <div className="mt-3 space-y-1 text-xs text-gray-500">
                     <p>📅 {event.date}</p>
                     <p>📍 {event.location}</p>

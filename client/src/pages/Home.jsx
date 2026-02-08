@@ -5,7 +5,7 @@ import CategoryGrid from "../components/CategoryGrid";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-[#0b1120] text-white">
+    <div className="min-h-screen bg-[#0b1120] text-white pt-20">
       {/* ================= HERO SECTION ================= */}
       <section className="min-h-screen flex items-center bg-[#0b1120]">
         <div className="grid items-center grid-cols-1 gap-12 px-10 mx-auto max-w-7xl lg:grid-cols-2">

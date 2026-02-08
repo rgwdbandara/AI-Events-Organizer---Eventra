@@ -67,85 +67,81 @@ export default function MyTickets() {
         </div>
       ) : (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {tickets.map((ticket) => {
-            const event = ticket.event;
-            const isCheckedIn = ticket.checkedIn;
+          {tickets
+            .filter((ticket) => ticket.event)
+            .map((ticket) => {
+              const event = ticket.event;
+              const isCheckedIn = ticket.checkedIn;
 
-            return (
-              <div
-                key={ticket._id}
-                className="overflow-hidden bg-[#111827] border border-white/10 rounded-xl"
-              >
-                {event?.imageUrl && (
-                  <img
-                    src={event.imageUrl}
-                    alt={event.title}
-                    className="object-cover w-full h-40"
-                  />
-                )}
-
-                <div className="p-5">
-                  <div className="flex items-center justify-between mb-2">
-                    <h2 className="text-lg font-semibold">
-                      {event?.title}
-                    </h2>
-
-                    <span
-                      className={`text-xs px-2 py-1 rounded ${
-                        isCheckedIn
-                          ? "bg-green-500/20 text-green-400"
-                          : "bg-blue-500/20 text-blue-400"
-                      }`}
-                    >
-                      {isCheckedIn ? "Checked In" : "Active"}
-                    </span>
-                  </div>
-
-                  {new Date(`${event?.date}T${event?.time}`) < new Date() && (
-                    <span className="px-2 py-1 text-xs text-red-400 rounded bg-red-400/10">
-                      Expired
-                    </span>
+              return (
+                <div
+                  key={ticket._id}
+                  className="overflow-hidden bg-[#111827] border border-white/10 rounded-xl"
+                >
+                  {event?.imageUrl && (
+                    <img
+                      src={event.imageUrl}
+                      alt={event.title}
+                      className="object-cover w-full h-40"
+                    />
                   )}
 
-                  <span className="inline-block px-2 py-1 text-xs text-green-400 rounded bg-green-400/10">
-                    Free Ticket
-                  </span>
-                  <p className="mt-1 text-xs text-gray-500">
-                    Payments will be supported in future versions
-                  </p>
+                  <div className="p-5">
+                    <div className="flex items-center justify-between mb-2">
+                      <h2 className="text-lg font-semibold leading-snug line-clamp-2">
+                        {event?.title}
+                      </h2>
 
-                  <p className="text-sm text-gray-400">
-                    📅 {event?.date}
-                  </p>
-                  <p className="text-sm text-gray-400">
-                    📍 {event?.location}
-                  </p>
-
-                  <p className="mt-2 text-xs text-gray-500">
-                    Ticket ID: {ticket._id.slice(0, 8)}...
-                  </p>
-
-                  <div className="flex gap-2 mt-4">
-                    <button
-                      onClick={() => setSelectedTicket(ticket)}
-                      className="flex-1 py-2 font-semibold text-black bg-white rounded-lg hover:bg-gray-200"
-                    >
-                      Show Ticket
-                    </button>
-
-                    {!isCheckedIn && (
-                      <button
-                        onClick={() => handleCancel(ticket._id)}
-                        className="px-3 py-2 text-sm text-red-400 border rounded-lg border-red-400/30 hover:bg-red-400/10"
+                      <span
+                        className={`text-xs px-2 py-1 rounded ${
+                          isCheckedIn
+                            ? "bg-green-500/20 text-green-400"
+                            : "bg-blue-500/20 text-blue-400"
+                        }`}
                       >
-                        Cancel
+                        {isCheckedIn ? "Checked In" : "Active"}
+                      </span>
+                    </div>
+
+                    <p className="text-sm text-gray-400">
+                      📅 {event?.date}
+                    </p>
+                    <p className="text-sm text-gray-400">
+                      📍 {event?.location}
+                    </p>
+
+                    <p className="mt-1 text-xs text-gray-400">
+                      👤 Event by{" "}
+                      <span className="font-medium text-gray-300">
+                        {event.organizer?.name || "Unknown"}
+                      </span>
+                    </p>
+
+                    <p className="mt-2 text-xs text-gray-500">
+                      Ticket ID: {ticket._id.slice(0, 8)}...
+                    </p>
+
+                    <div className="flex gap-2 mt-4">
+                      <button
+                        onClick={() => setSelectedTicket(ticket)}
+                        className="flex-1 py-2 font-semibold text-black bg-white rounded-lg hover:bg-gray-200"
+                      >
+                        Show Ticket
                       </button>
-                    )}
+
+                      {!isCheckedIn && (
+                        <button
+                          onClick={() => handleCancel(ticket._id)}
+                          className="px-3 py-2 text-sm text-red-400 border rounded-lg border-red-400/30 hover:bg-red-400/10"
+                        >
+                          Cancel
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
         </div>
       )}
 

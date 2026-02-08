@@ -83,6 +83,17 @@ export default function EventDetails() {
               {event.category}
             </span>
             <h1 className="mt-2 text-4xl font-bold">{event.title}</h1>
+            <p className="mt-2 text-sm text-gray-400">
+              👤 Organized by{" "}
+              <span className="text-gray-200 font-semibold">
+                {event.organizer?.name}
+              </span>
+              {localStorage.getItem("userId") === event.organizer?._id && (
+                <span className="ml-3 px-2 py-1 text-xs rounded bg-purple-500/20 text-purple-400">
+                  Your Event
+                </span>
+              )}
+            </p>
             <p className="text-gray-300">
               📅 {event.date} • ⏰ {event.time} • 📍 {event.location}
             </p>

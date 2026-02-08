@@ -23,7 +23,9 @@ function App() {
     <Router>
       <Navbar />
 
-      <Routes>
+      {/* 👇 GLOBAL CONTENT OFFSET */}
+      <div className="pt-20">
+        <Routes>
         {/* ================= PUBLIC ================= */}
         <Route path="/" element={<Home />} />
         <Route path="/explore" element={<Explore />} />
@@ -87,7 +89,8 @@ function App() {
           path="/organizer/events/:eventId"
           element={<EventRegistrations />}
         />
-      </Routes>
+        </Routes>
+      </div>
     </Router>
   );
 }

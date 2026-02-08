@@ -86,6 +86,13 @@ export default function DiscoverCarousel() {
             {event.description}
           </p>
 
+          <p className="mt-3 text-sm text-gray-300">
+            👤 Event by{" "}
+            <span className="font-semibold">
+              {event.organizer?.name || "Unknown"}
+            </span>
+          </p>
+
           <div className="flex flex-wrap gap-6 mt-5 text-sm text-gray-300">
             <span>📅 {event.date}</span>
             <span>📍 {event.location}</span>

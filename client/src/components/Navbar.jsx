@@ -1,31 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
 
 export default function Navbar() {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("user"));
-  const [isVisible, setIsVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-
-      if (currentScrollY < lastScrollY) {
-        // Scrolling UP - show navbar
-        setIsVisible(true);
-      } else if (currentScrollY > lastScrollY && currentScrollY > 100) {
-        // Scrolling DOWN - hide navbar (but keep it visible if near top)
-        setIsVisible(false);
-      }
-
-      setLastScrollY(currentScrollY);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollY]);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -34,11 +12,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav
-      className={`fixed top-0 left-0 right-0 bg-[#0b1120] border-b border-white/10 px-8 py-4 z-50 transition-transform duration-300 ${
-        isVisible ? "translate-y-0" : "-translate-y-full"
-      }`}
-    >
+    <nav className="fixed top-0 left-0 right-0 bg-[#0b1120] border-b border-white/10 px-8 py-4 z-50">
       <div className="flex items-center justify-between mx-auto max-w-7xl">
         
         {/* LEFT: LOGO */}

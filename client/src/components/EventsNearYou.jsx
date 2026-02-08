@@ -79,6 +79,13 @@ export default function EventsNearYou() {
                 {event.description}
               </p>
 
+              <p className="text-xs text-gray-500 mt-1">
+                👤 Event by{" "}
+                <span className="text-gray-300 font-medium">
+                  {event.organizer?.name || "Unknown"}
+                </span>
+              </p>
+
               <div className="mt-3 space-y-1 text-xs text-gray-500">
                 <p>📅 {event.date}</p>
                 <p>📍 {event.location}</p>

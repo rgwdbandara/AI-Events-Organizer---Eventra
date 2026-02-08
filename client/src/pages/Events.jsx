@@ -50,6 +50,13 @@ export default function Events() {
                   {event.description}
                 </p>
 
+                <p className="mt-2 text-xs text-gray-400">
+                  👤 Event by{" "}
+                  <span className="font-medium text-gray-200">
+                    {event.organizer?.name || "Unknown"}
+                  </span>
+                </p>
+
                 <div className="mt-4 space-y-1 text-sm text-gray-400">
                   <p>📅 {event.date}</p>
                   <p>⏰ {event.time}</p>
