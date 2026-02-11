@@ -222,6 +222,9 @@ For support, please open an issue in the GitHub repository.
 <img width="1901" height="869" alt="Screenshot 2026-02-11 230624" src="https://github.com/user-attachments/assets/6f04c413-5eee-430c-8161-1423fa9d2395" />
 
 
+
+
+
 <img width="1894" height="874" alt="Screenshot 2026-02-11 230644" src="https://github.com/user-attachments/assets/6ea8eeec-8594-491e-859e-1ccc64901a41" />
 
 
