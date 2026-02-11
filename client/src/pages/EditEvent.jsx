@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../api/api";
 
-const API_URL = "http://localhost:5000/api/events";
 
 export default function EditEvent() {
   const { id } = useParams();
@@ -27,7 +26,7 @@ export default function EditEvent() {
   useEffect(() => {
     const fetchEvent = async () => {
       try {
-        const res = await axios.get(`${API_URL}/${id}`);
+        const res = await api.get(`/events/${id}`);
         setForm({
           title: res.data.title,
           description: res.data.description,
@@ -67,7 +66,7 @@ export default function EditEvent() {
     }
 
     try {
-      await axios.put(`${API_URL}/${id}`, formData, {
+      await api.put(`/events/${id}`, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",

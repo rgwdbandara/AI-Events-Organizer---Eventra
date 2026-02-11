@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import api from "../api/api";
 
 const API_URL = "http://localhost:5000/api/events";
 
@@ -11,7 +11,7 @@ export default function EventsNearYou() {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const res = await axios.get(API_URL);
+        const res = await api.get("/events");
         setEvents(res.data.slice(0, 4)); // show only 4 cards
       } catch (err) {
         console.error("Failed to load events", err);
@@ -79,9 +79,9 @@ export default function EventsNearYou() {
                 {event.description}
               </p>
 
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="mt-1 text-xs text-gray-500">
                 👤 Event by{" "}
-                <span className="text-gray-300 font-medium">
+                <span className="font-medium text-gray-300">
                   {event.organizer?.name || "Unknown"}
                 </span>
               </p>

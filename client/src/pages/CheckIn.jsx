@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import api from "../api/api";
 
 export default function CheckIn() {
   const [ticketId, setTicketId] = useState("");
@@ -9,8 +9,8 @@ export default function CheckIn() {
     try {
       const token = localStorage.getItem("token");
 
-      const res = await axios.post(
-        `http://localhost:5000/api/registrations/verify/${ticketId}`,
+      const res = await api.post(
+        `/registrations/verify/${ticketId}`,
         {},
         {
           headers: {
@@ -34,9 +34,9 @@ export default function CheckIn() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">
-      <div className="w-full max-w-md bg-gray-800 p-6 rounded-lg">
-        <h1 className="text-3xl font-bold mb-4 text-center">
+    <div className="flex items-center justify-center min-h-screen text-white bg-gray-900">
+      <div className="w-full max-w-md p-6 bg-gray-800 rounded-lg">
+        <h1 className="mb-4 text-3xl font-bold text-center">
           Event Check-in
         </h1>
 
@@ -66,7 +66,7 @@ export default function CheckIn() {
             <p>{result.message}</p>
 
             {result.success && (
-              <p className="text-sm mt-2">
+              <p className="mt-2 text-sm">
                 Event: {result.ticket.event.title}
               </p>
             )}

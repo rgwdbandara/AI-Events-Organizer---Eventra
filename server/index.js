@@ -8,15 +8,15 @@ const connectDB = require("./config/db");
 const app = express();
 
 // Middleware
-const corsOptions = {
-  origin: [
-    "http://localhost:5173",
-    "https://ai-events-organizer-eventra.vercel.app"
-  ],
-  credentials: true
-};
-
-app.use(cors(corsOptions));
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://ai-events-organizer-eventra.vercel.app",
+    ],
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 // Routes

@@ -1,11 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
 import api from "../api/api";
 import ExploreCarousel from "../components/ExploreCarousel";
 import TicketModal from "../components/TicketModal";
-
-const API_URL = "http://localhost:5000/api/events";
 
 export default function EventDetails() {
   const { id } = useParams();
@@ -20,7 +17,7 @@ export default function EventDetails() {
   useEffect(() => {
     const fetchEvent = async () => {
       try {
-        const res = await axios.get(`${API_URL}/${id}`);
+        const res = await api.get(`/events/${id}`);
         setEvent(res.data);
       } catch (err) {
         console.error("Failed to load event", err);
@@ -85,11 +82,11 @@ export default function EventDetails() {
             <h1 className="mt-2 text-4xl font-bold">{event.title}</h1>
             <p className="mt-2 text-sm text-gray-400">
               👤 Organized by{" "}
-              <span className="text-gray-200 font-semibold">
+              <span className="font-semibold text-gray-200">
                 {event.organizer?.name}
               </span>
               {localStorage.getItem("userId") === event.organizer?._id && (
-                <span className="ml-3 px-2 py-1 text-xs rounded bg-purple-500/20 text-purple-400">
+                <span className="px-2 py-1 ml-3 text-xs text-purple-400 rounded bg-purple-500/20">
                   Your Event
                 </span>
               )}

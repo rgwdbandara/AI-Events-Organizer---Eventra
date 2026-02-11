@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import api from "../api/api";
 
 const API_URL = "http://localhost:5000/api/events";
 
@@ -13,8 +13,8 @@ export default function Explore() {
   const fetchEvents = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(
-        `${API_URL}?search=${search}&category=${category}`
+      const res = await api.get(
+        `/events?search=${search}&category=${category}`
       );
       setEvents(res.data);
     } catch (err) {

@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../api/api";
 import { Link } from "react-router-dom";
-
-const API_URL = "http://localhost:5000/api/events";
 
 export default function DiscoverCarousel() {
   const [events, setEvents] = useState([]);
@@ -13,7 +11,7 @@ export default function DiscoverCarousel() {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const res = await axios.get(API_URL);
+        const res = await api.get("/events");
         setEvents(res.data);
       } catch (err) {
         console.error("Failed to load discover events", err);
