@@ -5,14 +5,15 @@ import CategoryGrid from "../components/CategoryGrid";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-[#0b1120] text-white pt-20">
+    <div className="bg-[#0b1120] text-white">
+
       {/* ================= HERO SECTION ================= */}
-      <section className="min-h-screen flex items-center bg-[#0b1120]">
+      <section className="pt-28 pb-20 bg-[#0b1120]">
         <div className="grid items-center grid-cols-1 gap-12 px-10 mx-auto max-w-7xl lg:grid-cols-2">
           
           {/* LEFT CONTENT */}
           <div>
-            <h1 className="text-5xl font-extrabold leading-tight lg:text-6xl">
+            <h1 className="text-4xl font-extrabold leading-tight lg:text-6xl">
               Discover & <br />
               create amazing{" "}
               <span className="text-blue-400">events</span>.
@@ -38,7 +39,7 @@ export default function Home() {
               <img
                 src="/hero.png"
                 alt="Event App Preview"
-                className="w-[360px] lg:w-[420px] drop-shadow-2xl"
+                className="w-[320px] sm:w-[360px] lg:w-[420px] drop-shadow-2xl"
               />
             </div>
           </div>
@@ -46,8 +47,8 @@ export default function Home() {
       </section>
 
       {/* ================= DISCOVER EVENTS ================= */}
-      <section className="px-10 mt-20">
-        <h2 className="mb-6 text-3xl font-bold">
+      <section className="px-10 mt-16">
+        <h2 className="mb-4 text-3xl font-bold">
           Discover Events
         </h2>
 
@@ -55,7 +56,6 @@ export default function Home() {
           Explore featured events happening around you
         </p>
 
-        {/* 🔥 AUTO ROTATING EVENT (click → /events/:id handled inside component) */}
         <DiscoverCarousel />
       </section>
 
@@ -66,7 +66,7 @@ export default function Home() {
       <CategoryGrid />
 
       {/* ================= CTA ================= */}
-      <section className="px-10 py-24 mt-24 text-center bg-[#0f172a]">
+      <section className="px-10 py-24 mt-20 text-center bg-[#0f172a]">
         <h2 className="text-4xl font-bold">
           Ready to host your own event?
         </h2>
