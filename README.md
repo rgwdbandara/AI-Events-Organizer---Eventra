@@ -2,6 +2,8 @@
 
 An intelligent event management platform powered by AI that streamlines event creation, organization, and attendee management. Built with modern web technologies and Google's Generative AI.
 
+🌐 **Live Demo**: [https://ai-events-organizer-eventra.vercel.app/](https://ai-events-organizer-eventra.vercel.app/)
+
 ## ✨ Features
 
 - 🤖 **AI-Powered Event Planning** - Leverage Google's Generative AI for smart event suggestions and organization
@@ -33,6 +35,11 @@ An intelligent event management platform powered by AI that streamlines event cr
 - **Cloudinary** - Image storage and management
 - **JWT** - Token-based authentication
 - **bcrypt** - Password hashing
+
+## 🚀 Deployment
+
+- **Frontend**: Deployed on Vercel - [https://ai-events-organizer-eventra.vercel.app/](https://ai-events-organizer-eventra.vercel.app/)
+- **Backend**: Deployed on Railway
 
 ## 📋 Prerequisites
 
@@ -75,29 +82,20 @@ Create a `.env` file in the `server` directory with the following variables:
 ```env
 # Server Configuration
 PORT=5000
-NODE_ENV=development
 
 # Database
-MONGODB_URI=your_mongodb_connection_string
-
-# Google OAuth
-GOOGLE_CLIENT_ID=your_google_client_id
-GOOGLE_CLIENT_SECRET=your_google_client_secret
-
-# Google Generative AI
-GOOGLE_AI_API_KEY=your_google_ai_api_key
+MONGO_URI=mongodb+srv://wathsala:Wathsala1234@eventracluster.xfowqlh.mongodb.net/eventra?retryWrites=true&w=majority&appName=EventraCluster
 
 # JWT
-JWT_SECRET=your_jwt_secret_key
-JWT_EXPIRE=7d
+JWT_SECRET=supersecretkey123
 
 # Cloudinary
-CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
-CLOUDINARY_API_KEY=your_cloudinary_api_key
-CLOUDINARY_API_SECRET=your_cloudinary_api_secret
+CLOUDINARY_CLOUD_NAME=dxjea0mgx
+CLOUDINARY_API_KEY=224654662921315
+CLOUDINARY_API_SECRET=J2qL7n5QOwzxK_K_QleBYRAEudY
 
-# Client URL (for CORS)
-CLIENT_URL=http://localhost:5173
+# Hugging Face API
+HF_API_KEY=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
 ```
 
 Create a `.env` file in the `client` directory:
@@ -168,7 +166,7 @@ AI-Events-Organizer---Eventra/
 ## 🔑 Key Features Breakdown
 
 ### AI Integration
-The application uses Google's Generative AI to:
+The application uses AI to:
 - Generate event descriptions
 - Suggest event activities
 - Provide intelligent event recommendations
