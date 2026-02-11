@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../api/api";
 
-const API_URL = "http://localhost:5000/api/events";
-
 export default function EventsNearYou() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -12,9 +10,21 @@ export default function EventsNearYou() {
     const fetchEvents = async () => {
       try {
         const res = await api.get("/events");
-        setEvents(res.data.slice(0, 4)); // show only 4 cards
+
+        // 🛡️ Make sure it's always an array
+        const data = res.data;
+
+        if (Array.isArray(data)) {
+          setEvents(data.slice(0, 4));
+        } else if (Array.isArray(data.events)) {
+          setEvents(data.events.slice(0, 4));
+        } else {
+          setEvents([]);
+        }
+
       } catch (err) {
         console.error("Failed to load events", err);
+        setEvents([]);
       } finally {
         setLoading(false);
       }
@@ -29,7 +39,6 @@ export default function EventsNearYou() {
 
   return (
     <div className="mt-16">
-      {/* HEADER */}
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-2xl font-bold">
           Events Near You
@@ -43,14 +52,12 @@ export default function EventsNearYou() {
         </Link>
       </div>
 
-      {/* EVENT CARDS */}
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        {events.map((event) => (
+        {Array.isArray(events) && events.map((event) => (
           <div
             key={event._id}
             className="overflow-hidden transition bg-[#111827] border border-gray-800 rounded-xl hover:-translate-y-1"
           >
-            {/* IMAGE */}
             <div className="h-40 overflow-hidden bg-gray-700">
               {event.imageUrl ? (
                 <img
@@ -65,7 +72,6 @@ export default function EventsNearYou() {
               )}
             </div>
 
-            {/* CONTENT */}
             <div className="p-4">
               <span className="inline-block px-2 py-1 mb-2 text-xs text-blue-400 rounded bg-blue-400/10">
                 {event.category}
