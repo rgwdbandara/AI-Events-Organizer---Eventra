@@ -1,4 +1,4 @@
-<img width="1901" height="869" alt="Screenshot 2026-02-11 230624" src="https://github.com/user-attachments/assets/6ca12be9-d560-4708-b922-55831a4d3aec" /># Eventra - AI Events Organizer 🎯
+# Eventra - AI Events Organizer 🎯
 
 An intelligent event management platform powered by AI that streamlines event creation, organization, and attendee management. Built with modern web technologies and Google's Generative AI.
 
@@ -217,21 +217,31 @@ For support, please open an issue in the GitHub repository.
 ---
 
 
+
+
 <img width="1901" height="869" alt="Screenshot 2026-02-11 230624" src="https://github.com/user-attachments/assets/6f04c413-5eee-430c-8161-1423fa9d2395" />
+
 
 <img width="1894" height="874" alt="Screenshot 2026-02-11 230644" src="https://github.com/user-attachments/assets/6ea8eeec-8594-491e-859e-1ccc64901a41" />
 
+
 <img width="1899" height="873" alt="Screenshot 2026-02-11 230706" src="https://github.com/user-attachments/assets/d1967c4d-c943-4718-8bee-653f6ac1e8de" />
+
 
 <img width="1897" height="866" alt="Screenshot 2026-02-11 230724" src="https://github.com/user-attachments/assets/e3cc9ea2-cbcc-4043-89eb-acc8aeab215d" />
 
+
 <img width="1901" height="863" alt="Screenshot 2026-02-11 230750" src="https://github.com/user-attachments/assets/a40d5df6-ba69-4722-90ff-bb1f18211a5c" />
+
 
 <img width="1890" height="858" alt="Screenshot 2026-02-11 230740" src="https://github.com/user-attachments/assets/0c8aae76-d11c-4404-a8fd-78d72c40a6c8" />
 
+
 <img width="1900" height="869" alt="Screenshot 2026-02-11 235201" src="https://github.com/user-attachments/assets/2359296d-836a-4992-9720-e6cc4fd391ea" />
+
  
 <img width="1899" height="870" alt="Screenshot 2026-02-11 235009" src="https://github.com/user-attachments/assets/88a76864-ab7e-4f32-9266-9ad59ddb5761" />
+
 
 <img width="1894" height="872" alt="Screenshot 2026-02-11 235102" src="https://github.com/user-attachments/assets/e947a9f5-3a35-417f-9155-bddd632b398a" />
 
